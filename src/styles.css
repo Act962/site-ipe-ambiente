@@ -1,0 +1,126 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ipe-green-50: #f1f9ea;
+  --color-ipe-green-100: #d9efc2;
+  --color-ipe-green-300: #8fd35a;
+  --color-ipe-green-400: #6fc23a;
+  --color-ipe-green-500: #4caf28;
+  --color-ipe-green-600: #2e8b1f;
+  --color-ipe-brand: #2d8700;
+  --color-ipe-green-700: #1f6815;
+  --color-ipe-green-800: #134510;
+  --color-ipe-green-900: #0c2f0a;
+  --color-ipe-pink: #f29ec4;
+  --color-ipe-pink-dark: #e07aa9;
+  --font-script: "Dancing Script", cursive;
+  --font-sans: "Montserrat", ui-sans-serif, system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  color: #1a1a1a;
+  background: #ffffff;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.font-script {
+  font-family: var(--font-script);
+}
+
+/* Forest hero background — CSS-only stand-in for the photo */
+.hero-forest {
+  background:
+    radial-gradient(ellipse at 50% 45%, rgba(242, 158, 196, 0.4) 0, transparent 30%),
+    radial-gradient(circle at 18% 80%, rgba(12, 47, 10, 0.65) 0, transparent 50%),
+    radial-gradient(circle at 82% 20%, rgba(31, 104, 21, 0.55) 0, transparent 55%),
+    linear-gradient(180deg, #1f6815 0%, #134510 55%, #0c2f0a 100%);
+}
+.hero-forest::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 10% 30%, rgba(255, 255, 255, 0.04) 0 2px, transparent 3px),
+    radial-gradient(circle at 30% 70%, rgba(0, 0, 0, 0.25) 0 4px, transparent 5px),
+    radial-gradient(circle at 70% 40%, rgba(0, 0, 0, 0.2) 0 3px, transparent 4px),
+    radial-gradient(circle at 90% 80%, rgba(255, 255, 255, 0.05) 0 2px, transparent 3px);
+  background-size: 80px 80px, 60px 60px, 120px 120px, 100px 100px;
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+/* Ribbon banner used for section titles */
+.title-ribbon {
+  position: relative;
+  display: inline-block;
+  padding: 0.6rem 4rem;
+  background: var(--color-ipe-green-600);
+  color: white;
+  border-radius: 9999px;
+  box-shadow: 0 8px 0 rgba(0, 0, 0, 0.15);
+}
+.title-ribbon::before,
+.title-ribbon::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 32px;
+  height: 32px;
+  background: var(--color-ipe-green-700);
+  transform: translateY(-50%) rotate(45deg);
+  z-index: -1;
+  border-radius: 4px;
+}
+.title-ribbon::before { left: -12px; }
+.title-ribbon::after  { right: -12px; }
+
+/* Service / founder photo placeholder — natural-toned gradient */
+.photo-placeholder {
+  background:
+    radial-gradient(circle at 30% 30%, #8fd35a 0%, transparent 45%),
+    radial-gradient(circle at 70% 80%, #1f6815 0%, transparent 55%),
+    linear-gradient(135deg, #2e8b1f 0%, #0c2f0a 100%);
+  position: relative;
+  overflow: hidden;
+}
+.photo-placeholder::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 20% 70%, rgba(0, 0, 0, 0.25) 0 5px, transparent 6px),
+    radial-gradient(circle at 60% 30%, rgba(255, 255, 255, 0.08) 0 4px, transparent 5px),
+    radial-gradient(circle at 80% 60%, rgba(0, 0, 0, 0.2) 0 6px, transparent 7px);
+  background-size: 30px 30px, 25px 25px, 40px 40px;
+}
+
+/* Treeline band — stylized treetops silhouettes */
+.treeline {
+  background:
+    radial-gradient(circle at 5% 100%, #0c2f0a 0 34px, transparent 35px),
+    radial-gradient(circle at 15% 100%, #134510 0 42px, transparent 43px),
+    radial-gradient(circle at 25% 100%, #0c2f0a 0 30px, transparent 31px),
+    radial-gradient(circle at 35% 100%, #1f6815 0 46px, transparent 47px),
+    radial-gradient(circle at 45% 100%, #0c2f0a 0 34px, transparent 35px),
+    radial-gradient(circle at 55% 100%, #134510 0 42px, transparent 43px),
+    radial-gradient(circle at 65% 100%, #0c2f0a 0 30px, transparent 31px),
+    radial-gradient(circle at 75% 100%, #1f6815 0 46px, transparent 47px),
+    radial-gradient(circle at 85% 100%, #0c2f0a 0 34px, transparent 35px),
+    radial-gradient(circle at 95% 100%, #134510 0 40px, transparent 41px),
+    linear-gradient(180deg, transparent 0%, #134510 78%);
+}
