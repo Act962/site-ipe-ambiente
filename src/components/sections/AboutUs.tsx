@@ -5,17 +5,43 @@ import { SectionTitle } from '#/components/ui/SectionTitle'
 type FounderCardProps = {
   name: string
   bio: string
+  photoSrc: string
   reverse?: boolean
 }
 
-function FounderCard({ name, bio, reverse = false }: FounderCardProps) {
+function CurvedArrow({ flip = false }: { flip?: boolean }) {
+  return (
+    <svg
+      viewBox="0 0 120 80"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      className={`hidden h-16 w-24 shrink-0 self-start text-ipe-green-600 md:block ${
+        flip ? '-scale-x-100' : ''
+      }`}
+    >
+      <path d="M6 14 C 40 6, 80 18, 104 56" />
+      <path d="M102 40 L 104 56 L 91 47" />
+    </svg>
+  )
+}
+
+function FounderCard({ name, bio, photoSrc, reverse = false }: FounderCardProps) {
   return (
     <div
       className={`flex flex-col items-center gap-6 md:flex-row ${
         reverse ? 'md:flex-row-reverse' : ''
       }`}
     >
-      <ClippedPhoto className="h-56 w-72 shrink-0 md:h-64 md:w-80" />
+      <ClippedPhoto
+        className="h-56 w-72 shrink-0 md:h-64 md:w-80"
+        src={photoSrc}
+        alt={name}
+      />
+      <CurvedArrow flip={reverse} />
       <p className="text-sm leading-relaxed text-ipe-green-900">
         <span className="font-bold">{name}:</span> {bio}
       </p>
@@ -44,11 +70,13 @@ export function AboutUs() {
         <div className="space-y-10">
           <FounderCard
             name="Elisângela Lucena da Silva"
+            photoSrc="/images/07.jpeg"
             bio="Co-fundadora da Ipê - Educação Ambiental, professora licenciada em Ciências Naturais, especialista em Educação Ambiental, profissional com experiência em diversos segmentos da educação e coordenação de projetos."
           />
           <FounderCard
             reverse
             name="Aline Carla dos Santos Moraes Marinho"
+            photoSrc="/images/08.jpeg"
             bio="Co-fundadora da Ipê - Educação Ambiental, professora licenciada em Biologia, especialista em Educação Ambiental, mestre em Ciências Ambientais, profissional com experiência em diversos segmentos da educação, arte e cultura."
           />
         </div>

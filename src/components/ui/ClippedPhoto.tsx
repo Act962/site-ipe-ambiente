@@ -2,6 +2,7 @@ type ClippedPhotoProps = {
   className?: string
   src?: string
   alt?: string
+  imgClassName?: string
   children?: React.ReactNode
 }
 
@@ -29,6 +30,7 @@ export function ClippedPhoto({
   className = '',
   src,
   alt = '',
+  imgClassName = '',
   children,
 }: ClippedPhotoProps) {
   return (
@@ -41,7 +43,7 @@ export function ClippedPhoto({
           <img
             src={src}
             alt={alt}
-            className="h-full w-full object-cover"
+            className={`h-full w-full object-cover ${imgClassName}`}
           />
         ) : (
           <div className="photo-placeholder h-full w-full" />

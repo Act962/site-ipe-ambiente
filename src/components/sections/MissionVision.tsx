@@ -14,11 +14,20 @@ export function MissionVision() {
               global de forma inclusiva e sustentável.
             </p>
           </div>
-          <ClippedPhoto className="h-60 w-80 md:h-72 md:w-96" />
+          <ClippedPhoto
+            className="h-60 w-80 md:h-72 md:w-96"
+            src="/images/01.jpeg"
+            alt="Missão"
+          />
         </div>
 
         <div className="grid items-center gap-8 md:grid-cols-[auto_1fr]">
-          <ClippedPhoto className="h-60 w-80 md:h-72 md:w-96" />
+          <ClippedPhoto
+            className="h-60 w-80 md:h-72 md:w-96"
+            src="/images/02.jpeg"
+            alt="Visão"
+            imgClassName="object-top"
+          />
           <div>
             <h3 className="mb-3 text-lg font-bold text-ipe-pink">Visão:</h3>
             <p className="text-sm leading-relaxed text-white/95">
