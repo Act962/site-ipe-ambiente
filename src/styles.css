@@ -46,7 +46,7 @@ html {
 .hero-forest {
   background:
     linear-gradient(180deg, rgba(12, 47, 10, 0.55) 0%, rgba(19, 69, 16, 0.45) 55%, rgba(12, 47, 10, 0.65) 100%),
-    url("/images/hero-background.jpeg") center / cover no-repeat;
+    url("/images/hero-background.png") center / cover no-repeat;
 }
 
 /* Ribbon banner used for section titles */
@@ -92,6 +92,119 @@ html {
     radial-gradient(circle at 60% 30%, rgba(255, 255, 255, 0.08) 0 4px, transparent 5px),
     radial-gradient(circle at 80% 60%, rgba(0, 0, 0, 0.2) 0 6px, transparent 7px);
   background-size: 30px 30px, 25px 25px, 40px 40px;
+}
+
+/* ---------- Subtle motion utilities ---------- */
+
+/* Scroll reveal — fade + slight rise, becomes visible once `.is-visible` is added */
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 700ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Stagger children — each child reveals slightly after the previous */
+.reveal-stagger > * {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 600ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal-stagger.is-visible > * {
+  opacity: 1;
+  transform: none;
+}
+.reveal-stagger.is-visible > *:nth-child(1)  { transition-delay: 60ms; }
+.reveal-stagger.is-visible > *:nth-child(2)  { transition-delay: 130ms; }
+.reveal-stagger.is-visible > *:nth-child(3)  { transition-delay: 200ms; }
+.reveal-stagger.is-visible > *:nth-child(4)  { transition-delay: 270ms; }
+.reveal-stagger.is-visible > *:nth-child(5)  { transition-delay: 340ms; }
+.reveal-stagger.is-visible > *:nth-child(6)  { transition-delay: 410ms; }
+.reveal-stagger.is-visible > *:nth-child(7)  { transition-delay: 480ms; }
+.reveal-stagger.is-visible > *:nth-child(8)  { transition-delay: 550ms; }
+
+/* Hero — entrance fade-up on first paint */
+@keyframes hero-rise {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: none; }
+}
+.hero-rise {
+  animation: hero-rise 1100ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.hero-rise-delay {
+  animation: hero-rise 1100ms cubic-bezier(0.22, 1, 0.36, 1) 180ms both;
+}
+
+/* Slow Ken Burns drift on the hero photo */
+@keyframes ken-burns {
+  from { transform: scale(1.06); }
+  to   { transform: scale(1.14); }
+}
+.ken-burns {
+  animation: ken-burns 18s ease-in-out infinite alternate;
+}
+
+/* Soft pulsing glow — used behind the final CTA */
+@keyframes soft-pulse {
+  0%, 100% { transform: scale(1);   opacity: 0.45; }
+  50%      { transform: scale(1.18); opacity: 0.7; }
+}
+.soft-pulse {
+  animation: soft-pulse 5s ease-in-out infinite;
+}
+
+/* Photo lift on hover */
+.photo-lift {
+  transition: transform 500ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.photo-lift:hover {
+  transform: translateY(-4px) scale(1.015);
+}
+
+/* Animated underline for nav links */
+.nav-link {
+  position: relative;
+  transition: color 250ms ease;
+}
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -6px;
+  height: 2px;
+  background: var(--color-ipe-pink);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.nav-link:hover::after {
+  transform: scaleX(1);
+}
+
+/* Reduced motion — respect user preference */
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal-stagger > *,
+  .hero-rise,
+  .hero-rise-delay,
+  .ken-burns,
+  .soft-pulse,
+  .photo-lift,
+  .nav-link::after {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
 }
 
 /* Treeline band — stylized treetops silhouettes */

@@ -1,6 +1,8 @@
 {
-  "short_name": "TanStack App",
-  "name": "Create TanStack App Sample",
+  "short_name": "Ipê",
+  "name": "Ipê - Educação Ambiental",
+  "description": "Consultoria, formações e projetos em educação ambiental, conectando saberes locais a uma consciência global.",
+  "lang": "pt-BR",
   "icons": [
     {
       "src": "favicon.ico",
@@ -8,18 +10,14 @@
       "type": "image/x-icon"
     },
     {
-      "src": "logo192.png",
+      "src": "images/logo.png",
       "type": "image/png",
-      "sizes": "192x192"
-    },
-    {
-      "src": "logo512.png",
-      "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "512x512",
+      "purpose": "any maskable"
     }
   ],
-  "start_url": ".",
+  "start_url": "/",
   "display": "standalone",
-  "theme_color": "#000000",
+  "theme_color": "#2d8700",
   "background_color": "#ffffff"
 }
