@@ -41,9 +41,9 @@ export function Hero() {
 
 			<Petals count={16} />
 
-			<div ref={treelineRef} className="hero-treeline">
+			{/* <div ref={treelineRef} className="hero-treeline">
 				<img src="/images/trees-rose.png" alt="" aria-hidden="true" />
-			</div>
+			</div> */}
 
 			<div ref={contentRef} className="hero-content">
 				<img
