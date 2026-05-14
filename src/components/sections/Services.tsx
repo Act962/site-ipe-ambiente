@@ -77,7 +77,7 @@ export function Services() {
 
 			<div className="services-inner">
 				<div ref={titleRef} className="reveal">
-					<SectionTitle eyebrow="O que fazemos" eyebrowOnDark>
+					<SectionTitle eyebrow="O que fazemos" eyebrowOnDark withTrees={false}>
 						Serviços
 					</SectionTitle>
 				</div>

@@ -80,7 +80,9 @@ export function AboutUs() {
 		<section id="about-us" className="about">
 			<div className="about-inner">
 				<div ref={titleRef} className="reveal">
-					<SectionTitle eyebrow="Nossa história">Quem somos</SectionTitle>
+					<SectionTitle eyebrow="Nossa história" withTrees={false}>
+						Quem somos
+					</SectionTitle>
 				</div>
 
 				<div ref={introRef} className="reveal about-intro">
