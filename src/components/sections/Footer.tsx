@@ -1,34 +1,66 @@
-import { Instagram } from "lucide-react";
 import { Logo } from "#/components/ui/Logo";
 
 export function Footer() {
 	return (
-		<footer id="contact" className="bg-ipe-green-900 py-16 text-white">
-			<div className="mx-auto flex max-w-5xl flex-col items-center gap-6 px-6 text-center">
+		<footer id="contact" className="site-footer">
+			<div className="footer-inner">
 				<Logo size="lg" />
-
 				<a
 					href="https://instagram.com/ipeeducacaoambiental"
 					target="_blank"
 					rel="noreferrer"
-					className="inline-flex items-center gap-2 text-sm hover:text-ipe-pink"
+					className="footer-social"
 				>
-					<Instagram className="h-4 w-4" />
+					<svg
+						width="18"
+						height="18"
+						viewBox="0 0 24 24"
+						fill="none"
+						aria-hidden="true"
+					>
+						<rect
+							x="3"
+							y="3"
+							width="18"
+							height="18"
+							rx="5"
+							stroke="currentColor"
+							strokeWidth="2"
+						/>
+						<circle
+							cx="12"
+							cy="12"
+							r="4"
+							stroke="currentColor"
+							strokeWidth="2"
+						/>
+						<circle cx="17.5" cy="6.5" r="1" fill="currentColor" />
+					</svg>
 					<span>
-						<span className="text-ipe-green-500">ipe</span>
-						educacao
-						<span className="text-ipe-green-500">ambiental</span>
+						<span className="accent">ipe</span>educacao
+						<span className="accent">ambiental</span>
 					</span>
 				</a>
-
-				<a
-					href="#contact"
-					className="inline-flex items-center justify-center rounded-full bg-ipe-green-500 px-8 py-3 text-xs font-bold tracking-widest text-white shadow hover:bg-ipe-green-400"
-				>
-					SOLICITE UM ORÇAMENTO
+				<a href="#contact" className="footer-cta">
+					<span>SOLICITE UM ORÇAMENTO</span>
+					<svg
+						width="14"
+						height="12"
+						viewBox="0 0 16 14"
+						fill="none"
+						aria-hidden="true"
+					>
+						<path
+							d="M1 7H15M15 7L9 1M15 7L9 13"
+							stroke="currentColor"
+							strokeWidth="2"
+							strokeLinecap="round"
+							strokeLinejoin="round"
+						/>
+					</svg>
 				</a>
-
-				<p className="mt-6 text-[10px] tracking-[0.25em] text-white/60">
+				<div className="footer-divider" />
+				<p className="footer-rights">
 					TODOS OS DIREITOS RESERVADOS PARA IPÊ EDUCAÇÃO AMBIENTAL
 				</p>
 			</div>

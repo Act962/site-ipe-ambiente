@@ -1,25 +1,48 @@
 type CtaButtonProps = {
-  children?: React.ReactNode
-  href?: string
-  className?: string
-}
+	children?: React.ReactNode;
+	href?: string;
+	className?: string;
+	withArrow?: boolean;
+};
 
 export function CtaButton({
-  children = 'CONTRATAR',
-  href,
-  className = '',
+	children = "CONTRATAR",
+	href,
+	className = "",
+	withArrow = true,
 }: CtaButtonProps) {
-  const cls = `inline-flex items-center justify-center rounded-full bg-ipe-green-500 px-10 py-3 text-sm font-bold tracking-widest text-white shadow-lg shadow-ipe-green-900/30 transition-transform hover:scale-[1.03] hover:bg-ipe-green-400 active:scale-[0.98] ${className}`
-  if (href) {
-    return (
-      <a href={href} className={cls}>
-        {children}
-      </a>
-    )
-  }
-  return (
-    <button type="button" className={cls}>
-      {children}
-    </button>
-  )
+	const cls = `cta-btn ${className}`;
+	const inner = (
+		<>
+			<span>{children}</span>
+			{withArrow ? (
+				<span className="arrow" aria-hidden="true">
+					<svg
+						width="16"
+						height="14"
+						viewBox="0 0 16 14"
+						fill="none"
+						aria-hidden="true"
+					>
+						<path
+							d="M1 7H15M15 7L9 1M15 7L9 13"
+							stroke="currentColor"
+							strokeWidth="2"
+							strokeLinecap="round"
+							strokeLinejoin="round"
+						/>
+					</svg>
+				</span>
+			) : null}
+		</>
+	);
+	return href ? (
+		<a href={href} className={cls}>
+			{inner}
+		</a>
+	) : (
+		<button type="button" className={cls}>
+			{inner}
+		</button>
+	);
 }

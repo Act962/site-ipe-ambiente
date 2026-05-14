@@ -1,26 +1,69 @@
+import { useEffect, useRef } from "react";
+import { Petals } from "#/components/ui/Petals";
+
 export function Hero() {
+	const bgRef = useRef<HTMLDivElement | null>(null);
+	const treelineRef = useRef<HTMLDivElement | null>(null);
+	const contentRef = useRef<HTMLDivElement | null>(null);
+
+	useEffect(() => {
+		let raf = 0;
+		const onScroll = () => {
+			if (raf) return;
+			raf = requestAnimationFrame(() => {
+				raf = 0;
+				const y = window.scrollY;
+				if (y > window.innerHeight) return;
+				if (bgRef.current)
+					bgRef.current.style.transform = `translate3d(0, ${y * 0.35}px, 0)`;
+				if (treelineRef.current)
+					treelineRef.current.style.transform = `translate3d(0, ${y * -0.18}px, 0)`;
+				if (contentRef.current) {
+					contentRef.current.style.transform = `translate3d(0, ${y * 0.22}px, 0)`;
+					contentRef.current.style.opacity = String(Math.max(0, 1 - y / 600));
+				}
+			});
+		};
+		window.addEventListener("scroll", onScroll, { passive: true });
+		return () => {
+			window.removeEventListener("scroll", onScroll);
+			if (raf) cancelAnimationFrame(raf);
+		};
+	}, []);
+
 	return (
-		<section id="hero" className="relative isolate overflow-hidden">
-			<img
-				src="/images/hero-background.png"
-				alt=""
-				aria-hidden="true"
-				className="ken-burns absolute inset-0 -z-10 h-full w-full object-cover"
-			/>
-			<div className="absolute inset-0 -z-10 bg-linear-to-b from-black/55 via-ipe-green-900/45 to-black/65" />
-			<div className="relative mx-auto flex min-h-[80vh] max-w-6xl items-center justify-center px-6 py-40 md:min-h-[90vh] md:py-56">
-				<div className="max-w-3xl">
-					<img
-						src="/icons/quote.svg"
-						alt=""
-						aria-hidden="true"
-						className="hero-rise mb-4 h-10 w-10 md:h-12 md:w-12"
-					/>
-					<p className="hero-rise-delay text-2xl font-semibold uppercase leading-relaxed tracking-[0.18em] text-white drop-shadow-lg md:text-3xl">
-						Proteger as florestas do nosso planeta é a única forma de garantir
-						que nossos filhos e netos tenham um lar.
-					</p>
-				</div>
+		<section id="hero" className="hero" data-cursor="orb">
+			<div ref={bgRef} className="hero-bg">
+				<img src="/images/hero-background.png" alt="" aria-hidden="true" />
+			</div>
+			<div className="hero-overlay" />
+			<div className="hero-vignette" />
+
+			<Petals count={16} />
+
+			<div ref={treelineRef} className="hero-treeline">
+				<img src="/images/trees-rose.png" alt="" aria-hidden="true" />
+			</div>
+
+			<div ref={contentRef} className="hero-content">
+				<img
+					src="/icons/quote.svg"
+					alt=""
+					aria-hidden="true"
+					className="hero-quote-mark hero-rise"
+				/>
+				<p className="hero-text hero-rise-2">
+					Proteger as florestas do nosso planeta é a única forma de garantir que
+					nossos filhos e netos tenham um <span className="accent">lar</span>.
+				</p>
+				<p className="hero-author hero-rise-3">
+					Manifesto Ipê · Educação Ambiental
+				</p>
+			</div>
+
+			<div className="hero-scroll-cue" aria-hidden="true">
+				<span>Role para descobrir</span>
+				<span className="line" />
 			</div>
 		</section>
 	);

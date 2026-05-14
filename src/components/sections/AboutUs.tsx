@@ -4,8 +4,11 @@ import { SectionTitle } from "#/components/ui/SectionTitle";
 import { useReveal } from "#/hooks/useReveal";
 
 type FounderCardProps = {
-	name: string;
+	first: string;
+	last: string;
+	eyebrow: string;
 	bio: string;
+	tags: string[];
 	photoSrc: string;
 	reverse?: boolean;
 };
@@ -13,91 +16,111 @@ type FounderCardProps = {
 function CurvedArrow({ flip = false }: { flip?: boolean }) {
 	return (
 		<svg
-			viewBox="0 0 120 80"
+			className="curved-arrow"
+			viewBox="0 0 120 90"
 			fill="none"
 			stroke="currentColor"
-			strokeWidth="2.5"
+			strokeWidth="1.8"
 			strokeLinecap="round"
 			strokeLinejoin="round"
 			aria-hidden="true"
-			className={`hidden h-16 w-24 shrink-0 self-start text-ipe-green-600 md:block ${
-				flip ? "-scale-x-100" : ""
-			}`}
+			style={flip ? { transform: "scaleX(-1)" } : undefined}
 		>
-			<path d="M6 14 C 40 6, 80 18, 104 56" />
-			<path d="M102 40 L 104 56 L 91 47" />
+			<path d="M6 14 C 40 6, 78 20, 102 60" strokeDasharray="3 6" />
+			<path d="M100 44 L 102 60 L 89 51" />
 		</svg>
 	);
 }
 
 function FounderCard({
-	name,
+	first,
+	last,
+	eyebrow,
 	bio,
+	tags,
 	photoSrc,
 	reverse = false,
 }: FounderCardProps) {
 	const ref = useReveal<HTMLDivElement>();
 	return (
-		<div
-			ref={ref}
-			className={`reveal flex flex-col items-center gap-6 md:flex-row ${
-				reverse ? "md:flex-row-reverse" : ""
-			}`}
-		>
-			<ClippedPhoto
-				className="photo-lift h-56 w-72 shrink-0 md:h-64 md:w-80"
-				src={photoSrc}
-				alt={name}
-			/>
+		<div ref={ref} className={`founder reveal${reverse ? " is-reverse" : ""}`}>
+			<div className="founder-photo-wrap" data-cursor="orb">
+				<ClippedPhoto
+					style={{ width: 280, height: 220 }}
+					src={photoSrc}
+					alt={`${first} ${last}`}
+				/>
+			</div>
 			<CurvedArrow flip={reverse} />
-			<p className="text-sm leading-relaxed text-ipe-green-900">
-				<span className="font-bold">{name}:</span> {bio}
-			</p>
+			<div className="founder-meta">
+				<span className="founder-eyebrow">{eyebrow}</span>
+				<h3 className="founder-name">
+					<span className="first">{first}</span>
+					<span className="last">{last}</span>
+				</h3>
+				<p className="founder-bio">{bio}</p>
+				<div className="founder-tags">
+					{tags.map((t) => (
+						<span key={t} className="founder-tag">
+							{t}
+						</span>
+					))}
+				</div>
+			</div>
 		</div>
 	);
 }
 
 export function AboutUs() {
 	const titleRef = useReveal<HTMLDivElement>();
-	const introRef = useReveal<HTMLParagraphElement>();
+	const introRef = useReveal<HTMLDivElement>();
 	const ctaRef = useReveal<HTMLDivElement>();
 
 	return (
-		<section id="about-us" className="bg-white py-20">
-			<div className="mx-auto max-w-4xl px-6">
-				<div ref={titleRef} className="reveal mb-10 flex justify-center">
-					<SectionTitle>Quem somos</SectionTitle>
+		<section id="about-us" className="about">
+			<div className="about-inner">
+				<div ref={titleRef} className="reveal">
+					<SectionTitle eyebrow="Nossa história">Quem somos</SectionTitle>
 				</div>
 
-				<p
-					ref={introRef}
-					className="reveal mb-12 text-center text-base leading-relaxed text-ipe-green-900 md:text-justify"
-				>
-					A Ipê - Educação Ambiental surge em solo amazônico, da união entre a
-					expertise científica e a paixão pedagógica de duas pesquisadoras e
-					educadoras. Com um olhar atento às urgências socioambientais, a
-					empresa transforma o conhecimento acadêmico em soluções práticas, com
-					o objetivo de multiplicar hábitos sustentáveis e regenerativos no
-					cotidiano da sociedade. Nossa atuação é pautada pelo respeito aos
+				<div ref={introRef} className="reveal about-intro">
+					<span className="lead">
+						A Ipê nasce em solo amazônico — do encontro entre ciência e
+						pedagogia.
+					</span>
+					Da união entre a expertise científica e a paixão pedagógica de duas
+					pesquisadoras e educadoras, transformamos conhecimento acadêmico em
+					soluções práticas — multiplicando hábitos sustentáveis e regenerativos
+					no cotidiano da sociedade. Nossa atuação é pautada pelo respeito aos
 					ciclos naturais e pelo compromisso de formar cidadãos e instituições
 					capazes de coexistir em equilíbrio com o meio ambiente.
-				</p>
+				</div>
 
-				<div className="space-y-10">
+				<div className="founders">
 					<FounderCard
-						name="Elisângela Lucena da Silva"
+						first="Elisângela"
+						last="Lucena da Silva"
+						eyebrow="Co-fundadora"
 						photoSrc="/images/07.jpeg"
-						bio="Co-fundadora da Ipê - Educação Ambiental, professora licenciada em Ciências Naturais, especialista em Educação Ambiental, profissional com experiência em diversos segmentos da educação e coordenação de projetos."
+						bio="Professora licenciada em Ciências Naturais, especialista em Educação Ambiental, com vasta experiência em diversos segmentos da educação e coordenação de projetos."
+						tags={["Ciências Naturais", "Educação Ambiental", "Coordenação"]}
 					/>
 					<FounderCard
 						reverse
-						name="Aline Carla dos Santos Moraes Marinho"
+						first="Aline Carla"
+						last="dos Santos Moraes Marinho"
+						eyebrow="Co-fundadora"
 						photoSrc="/images/08.jpeg"
-						bio="Co-fundadora da Ipê - Educação Ambiental, professora licenciada em Biologia, especialista em Educação Ambiental, mestre em Ciências Ambientais, profissional com experiência em diversos segmentos da educação, arte e cultura."
+						bio="Professora licenciada em Biologia, especialista em Educação Ambiental, mestre em Ciências Ambientais, com experiência em educação, arte e cultura."
+						tags={[
+							"Biologia",
+							"Mestre em Ciências Ambientais",
+							"Arte & Cultura",
+						]}
 					/>
 				</div>
 
-				<div ref={ctaRef} className="reveal mt-12 flex justify-center">
+				<div ref={ctaRef} className="reveal about-cta">
 					<CtaButton href="#contact">CONTRATAR</CtaButton>
 				</div>
 			</div>
