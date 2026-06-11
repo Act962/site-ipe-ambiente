@@ -1,0 +1,80 @@
+/* ────────── ÁREAS DE ATUAÇÃO ────────── */
+.areas { background: var(--paper); }
+.area-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+.area {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 44px 40px 36px;
+  transition: all .35s ease;
+  position: relative;
+  overflow: hidden;
+  display: flex; flex-direction: column;
+}
+.area::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, var(--green-800), var(--green-600));
+  opacity: 0;
+  transition: opacity .35s;
+  z-index: 0;
+}
+.area > * { position: relative; z-index: 1; }
+.area:hover { transform: translateY(-4px); box-shadow: 0 24px 50px -28px rgba(15,58,37,.35); border-color: transparent; }
+.area:hover::before { opacity: 1; }
+.area:hover, .area:hover h3, .area:hover p, .area:hover li, .area:hover .area-tag { color: #fff; }
+.area:hover .area-tag { border-color: rgba(255,255,255,.4); }
+.area:hover .area-icon { background: rgba(255,255,255,.16); color: #fff; }
+.area:hover .area-icon svg { stroke: #fff; }
+
+.area-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 36px; }
+.area-icon {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  background: var(--green-50);
+  color: var(--green-800);
+  display: grid; place-items: center;
+  transition: background .35s;
+}
+.area-icon svg { width: 28px; height: 28px; stroke: var(--green-800); fill: none; stroke-width: 1.4; transition: stroke .35s; }
+.area-tag {
+  font-family: var(--font-mono-stack);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  padding: 6px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--muted);
+}
+.area h3 {
+  font-family: var(--font-serif-stack);
+  font-weight: 400;
+  font-size: 32px;
+  line-height: 1.1;
+  margin: 0 0 14px;
+}
+.area > p { color: var(--muted); font-size: 15.5px; line-height: 1.6; margin: 0 0 28px; }
+.area ul { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.area li {
+  padding: 12px 0;
+  font-size: 14.5px;
+  color: var(--ink-soft);
+  border-bottom: 1px solid var(--line);
+  display: flex; align-items: center; gap: 12px;
+}
+.area li::before {
+  content: ""; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--green-500);
+  flex-shrink: 0;
+}
+.area:hover li { border-color: rgba(255,255,255,.2); }
+.area:hover li::before { background: #fff; }
+
+@media (max-width: 800px) {
+  .area-grid { grid-template-columns: 1fr; }
+  .area { padding: 36px 28px 28px; }
+}

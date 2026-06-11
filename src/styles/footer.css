@@ -1,0 +1,86 @@
+/* ────────── RODAPÉ ────────── */
+footer {
+  background: #0c2b1c;
+  color: rgba(255,255,255,.78);
+  padding: 90px 0 36px;
+  font-size: 14.5px;
+}
+.foot-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+  gap: 60px;
+  margin-bottom: 70px;
+}
+.foot-brand { display: flex; flex-direction: column; gap: 22px; max-width: 360px; }
+.foot-brand .brand { color: #fff; }
+.foot-brand .brand .mark { background: rgba(255,255,255,.08); }
+.foot-brand p { color: rgba(255,255,255,.6); font-size: 14.5px; line-height: 1.7; margin: 0; }
+.foot-brand .quote {
+  font-family: var(--font-serif-stack);
+  font-size: 22px;
+  line-height: 1.3;
+  color: #fff;
+  font-style: italic;
+  border-left: 1px solid var(--green-500);
+  padding-left: 18px;
+}
+
+/* Lockup da marca (mark + texto), usado no rodapé */
+.brand .mark {
+  width: 44px; height: 44px;
+  background: #fff;
+  border-radius: 50%;
+  display: grid; place-items: center;
+  box-shadow: 0 2px 14px rgba(0,0,0,.08);
+}
+.brand .mark img { width: 32px; height: 32px; object-fit: contain; }
+.brand .txt { line-height: 1.05; }
+.brand .txt b { font-family: var(--font-serif-stack); font-size: 22px; font-weight: 400; letter-spacing: 0.02em; display: block; }
+.brand .txt small { font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase; opacity: .8; }
+
+footer h5 {
+  font-family: var(--font-mono-stack);
+  font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--green-500);
+  margin: 0 0 22px;
+  font-weight: 500;
+}
+footer ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+footer ul a { color: rgba(255,255,255,.78); transition: color .2s; }
+footer ul a:hover { color: #fff; }
+
+.foot-contact { display: flex; flex-direction: column; gap: 14px; }
+.foot-contact .row { display: flex; flex-direction: column; gap: 2px; }
+.foot-contact .row span { color: rgba(255,255,255,.5); font-size: 12px; font-family: var(--font-mono-stack); letter-spacing: 0.1em; text-transform: uppercase; }
+.foot-contact .row b { color: #fff; font-weight: 400; }
+
+.foot-socials { display: flex; gap: 10px; margin-top: 14px; }
+.foot-socials a {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,.15);
+  display: grid; place-items: center;
+  transition: all .25s;
+}
+.foot-socials a:hover { background: var(--green-500); border-color: var(--green-500); }
+.foot-socials svg { width: 16px; height: 16px; fill: currentColor; }
+
+.foot-bottom {
+  border-top: 1px solid rgba(255,255,255,.1);
+  padding-top: 28px;
+  display: flex; justify-content: space-between; align-items: center;
+  color: rgba(255,255,255,.45);
+  font-size: 12.5px;
+  font-family: var(--font-mono-stack);
+  letter-spacing: 0.06em;
+}
+
+@media (max-width: 900px) {
+  .foot-grid { grid-template-columns: 1fr 1fr; }
+  .foot-brand { grid-column: span 2; }
+}
+@media (max-width: 600px) {
+  .foot-grid { grid-template-columns: 1fr; gap: 44px; }
+  .foot-brand { grid-column: span 1; }
+  .foot-bottom { flex-direction: column; gap: 14px; text-align: center; }
+}

@@ -1,0 +1,71 @@
+/* ────────── ESG ────────── */
+.esg {
+  background: var(--green-900);
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+.esg::before {
+  content: "";
+  position: absolute; right: -200px; top: -200px;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(95,163,106,.18) 0%, transparent 70%);
+  border-radius: 50%;
+}
+.esg .wrap { position: relative; z-index: 2; }
+.esg .eyebrow { color: var(--green-500); }
+.esg .eyebrow::before { background: var(--green-500); }
+
+/* Botão ghost sobre o fundo escuro */
+.esg .btn-outline { background: transparent; color: #fff; border-color: rgba(255,255,255,.5); }
+
+.esg-grid {
+  display: grid; grid-template-columns: 1.1fr 1fr; gap: 80px; align-items: center;
+}
+.esg h2 {
+  font-family: var(--font-serif-stack);
+  font-weight: 400;
+  font-size: clamp(40px, 5vw, 72px);
+  line-height: 1.02;
+  letter-spacing: -0.015em;
+  margin: 18px 0 28px;
+}
+.esg h2 i { font-style: italic; color: var(--green-500); }
+.esg p.lead { color: rgba(255,255,255,.78); font-size: 17.5px; line-height: 1.7; margin: 0 0 36px; max-width: 50ch; }
+
+.esg-pillars { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.esg-pillar {
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 4px;
+  padding: 24px;
+  transition: background .25s;
+}
+.esg-pillar:hover { background: rgba(255,255,255,.08); }
+.esg-pillar .letter {
+  font-family: var(--font-serif-stack);
+  font-size: 48px; line-height: 1;
+  color: var(--green-500);
+  margin-bottom: 14px;
+  display: block;
+}
+.esg-pillar h4 { margin: 0 0 6px; font-size: 16px; font-weight: 500; }
+.esg-pillar p { margin: 0; color: rgba(255,255,255,.7); font-size: 13.5px; line-height: 1.55; }
+
+.ods-grid {
+  margin-top: 36px;
+  display: flex; flex-wrap: wrap; gap: 8px;
+}
+.ods-chip {
+  font-family: var(--font-mono-stack);
+  font-size: 11px;
+  padding: 6px 12px;
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: 999px;
+  color: rgba(255,255,255,.8);
+  letter-spacing: 0.08em;
+}
+
+@media (max-width: 900px) {
+  .esg-grid { grid-template-columns: 1fr; gap: 50px; }
+}

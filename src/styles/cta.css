@@ -1,0 +1,33 @@
+/* ────────── CTA FINAL ────────── */
+.cta-final {
+  position: relative;
+  color: #fff;
+  overflow: hidden;
+  padding: 180px 0;
+}
+.cta-bg {
+  position: absolute; inset: 0;
+  background-image: url('/assets/13.jpeg');
+  background-size: cover;
+  background-position: center;
+}
+.cta-bg::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(15,58,37,.85) 0%, rgba(15,58,37,.6) 100%);
+}
+.cta-final .wrap { position: relative; z-index: 2; text-align: center; }
+.cta-final h2 {
+  font-family: var(--font-serif-stack);
+  font-weight: 400;
+  font-size: clamp(40px, 6vw, 88px);
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+  margin: 22px auto 32px;
+  max-width: 20ch;
+}
+.cta-final h2 i { font-style: italic; color: var(--green-500); }
+.cta-final p { color: rgba(255,255,255,.85); font-size: 18px; max-width: 56ch; margin: 0 auto 44px; }
+.cta-final .eyebrow { color: rgba(255,255,255,.85); justify-content: center; }
+.cta-final .eyebrow::before { background: rgba(255,255,255,.7); }
+.cta-final .hero-ctas { justify-content: center; }
