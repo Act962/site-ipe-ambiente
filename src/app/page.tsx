@@ -11,6 +11,10 @@ import Footer from "./_components/Footer";
 import ScrollReveal from "./_components/ScrollReveal";
 import { getContent } from "@/content/get";
 
+// Lê o conteúdo (padrões + edições do painel) fresco a cada requisição,
+// para que as edições apareçam imediatamente.
+export const dynamic = "force-dynamic";
+
 export default async function Home() {
   const content = await getContent();
 

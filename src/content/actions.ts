@@ -1,22 +1,20 @@
 "use server";
 
-import { revalidateTag } from "next/cache";
 import { put } from "@vercel/blob";
 import { verifySession } from "@/server/auth/dal";
 import { readOverrides, writeOverrides, type ContentOverrides } from "./store";
-import { CONTENT_TAG } from "./get";
 
 /**
  * Salva o override de uma ou mais seções. `patch` traz a(s) seção(ões) completas
  * (ex.: `{ hero: { ...todos os campos } }`); faz merge raso por seção sobre o que
- * já existe e revalida o conteúdo imediatamente (`expire: 0`).
- * Campos em branco voltam ao padrão na hora de renderizar (ver resolver em get.ts).
+ * já existe. As páginas leem o conteúdo fresco (sem cache), então a edição aparece
+ * na próxima carga — não é preciso revalidar. Campos em branco voltam ao padrão na
+ * hora de renderizar (ver resolver em get.ts).
  */
 export async function saveContent(patch: ContentOverrides): Promise<void> {
   await verifySession();
   const current = await readOverrides();
   await writeOverrides({ ...current, ...patch });
-  revalidateTag(CONTENT_TAG, { expire: 0 });
 }
 
 export type UploadResult = { url: string } | { error: string };

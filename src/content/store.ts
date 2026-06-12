@@ -35,7 +35,7 @@ export async function readOverrides(): Promise<ContentOverrides> {
   try {
     const url = await latestOverridesUrl();
     if (!url) return {};
-    const res = await fetch(url);
+    const res = await fetch(url, { cache: "no-store" });
     if (!res.ok) return {};
     return (await res.json()) as ContentOverrides;
   } catch {

@@ -1,7 +1,6 @@
 import "server-only";
 
 import type { CSSProperties } from "react";
-import { unstable_cache } from "next/cache";
 import { DEFAULTS, type SiteContent } from "./defaults";
 import { readOverrides } from "./store";
 
@@ -10,9 +9,6 @@ export type DeepPartial<T> = T extends (infer U)[]
   : T extends object
     ? { [K in keyof T]?: DeepPartial<T[K]> }
     : T;
-
-/** Tag de cache; invalidada a cada salvamento no painel (Fase 3) → update instantâneo. */
-export const CONTENT_TAG = "site-content";
 
 function isPlainObject(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
@@ -55,15 +51,13 @@ export function resolveContent(overrides: DeepPartial<SiteContent>): SiteContent
 }
 
 /**
- * Conteúdo efetivo do site (padrões + overrides do editor), lido uma vez por
- * requisição e cacheado sob `CONTENT_TAG`. A página chama isto e distribui os
- * dados às seções por props.
+ * Conteúdo efetivo do site (padrões + overrides do editor). Lê SEMPRE fresco do
+ * Blob — sem cache — para que toda edição apareça na próxima carga, tanto no site
+ * quanto no painel. As páginas que chamam isto são dinâmicas (`force-dynamic`).
  */
-export const getContent = unstable_cache(
-  async (): Promise<SiteContent> => resolveContent(await readOverrides()),
-  ["site-content"],
-  { tags: [CONTENT_TAG] },
-);
+export async function getContent(): Promise<SiteContent> {
+  return resolveContent(await readOverrides());
+}
 
 /**
  * Helper para imagens que ficam em `background-image` no CSS. Define a custom

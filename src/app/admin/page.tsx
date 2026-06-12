@@ -5,6 +5,9 @@ import Editor from "./_components/Editor";
 import Sidebar from "./_components/Sidebar";
 import MobileNav from "./_components/MobileNav";
 
+// Sempre renderiza com o conteúdo fresco do Blob (o editor precisa ver o atual).
+export const dynamic = "force-dynamic";
+
 export default async function AdminPage() {
   const session = await verifySession();
   const content = await getContent();
