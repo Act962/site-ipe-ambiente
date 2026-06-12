@@ -2,17 +2,10 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import type { SiteContent } from "@/content/defaults";
 import "@/styles/nav.css";
 
-const NAV_LINKS = [
-  { href: "#sobre", label: "Sobre" },
-  { href: "#atuacao", label: "Atuação" },
-  { href: "#diferenciais", label: "Diferenciais" },
-  { href: "#esg", label: "ESG" },
-  { href: "#galeria", label: "Experiências" },
-];
-
-export default function Nav() {
+export default function Nav({ data }: { data: SiteContent["nav"] }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -34,7 +27,7 @@ export default function Nav() {
         <a href="#top" className="brand" onClick={close}>
           <Image
             className="logo-img"
-            src="/assets/logo-ipe.png"
+            src={data.logo}
             alt="IPÊ Educação Ambiental"
             width={500}
             height={500}
@@ -43,15 +36,15 @@ export default function Nav() {
         </a>
 
         <ul className="nav-links">
-          {NAV_LINKS.map((link) => (
+          {data.links.map((link) => (
             <li key={link.href}>
               <a href={link.href}>{link.label}</a>
             </li>
           ))}
         </ul>
 
-        <a href="#contato" className="nav-cta">
-          Fale conosco
+        <a href={data.cta.href} className="nav-cta">
+          {data.cta.label}
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M5 12h14M13 5l7 7-7 7" />
           </svg>
@@ -78,7 +71,7 @@ export default function Nav() {
       <div className="mobile-menu">
         <div className="wrap">
           <ul>
-            {NAV_LINKS.map((link) => (
+            {data.links.map((link) => (
               <li key={link.href}>
                 <a href={link.href} onClick={close}>
                   {link.label}
@@ -86,8 +79,8 @@ export default function Nav() {
               </li>
             ))}
             <li>
-              <a href="#contato" className="menu-cta" onClick={close}>
-                Fale conosco
+              <a href={data.cta.href} className="menu-cta" onClick={close}>
+                {data.cta.label}
               </a>
             </li>
           </ul>

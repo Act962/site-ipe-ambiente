@@ -1,55 +1,25 @@
+import type { SiteContent } from "@/content/defaults";
 import "@/styles/values.css";
 
-const VALUES = [
-  {
-    num: "01",
-    title: "Pertencimento",
-    text: "Conectar pessoas aos seus territórios e à biodiversidade que as cerca.",
-  },
-  {
-    num: "02",
-    title: "Diversidade & Inclusão",
-    text: "Acolher saberes plurais, vozes locais e culturas tradicionais.",
-  },
-  {
-    num: "03",
-    title: "Sustentabilidade Integrada",
-    text: "Equilibrar dimensões ambiental, social, econômica e cultural.",
-  },
-  {
-    num: "04",
-    title: "Inovação",
-    text: "Métodos vivenciais, narrativas e tecnologias a serviço da educação.",
-  },
-  {
-    num: "05",
-    title: "Transparência & Diálogo",
-    text: "Comunicação clara, escuta ativa e construção colaborativa.",
-  },
-];
-
-export default function Values() {
+export default function Values({ data }: { data: SiteContent["values"] }) {
   return (
     <section className="values">
       <div className="wrap values-head">
         <div className="section-head">
           <div>
-            <span className="eyebrow">Nossos Valores</span>
+            <span className="eyebrow">{data.eyebrow}</span>
             <h2>
-              Os princípios que orientam <i>cada projeto.</i>
+              {data.titleLead}
+              <i>{data.titleEmphasis}</i>
             </h2>
           </div>
-          <p className="lead">
-            Cinco pilares que sustentam a maneira como pensamos, projetamos e
-            entregamos educação ambiental — em qualquer escala, para qualquer
-            público.
-          </p>
+          <p className="lead">{data.lead}</p>
         </div>
       </div>
 
       <div className="wrap values-body">
         <div className="values-grid">
-          {VALUES.map((value, index) => (
+          {data.items.map((value, index) => (
             <div
               key={value.num}
               className={`value reveal${index > 0 ? ` d${index}` : ""}`}

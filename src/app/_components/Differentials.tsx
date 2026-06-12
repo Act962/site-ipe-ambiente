@@ -1,52 +1,27 @@
+import type { SiteContent } from "@/content/defaults";
 import "@/styles/differentials.css";
 
-const STATS = [
-  {
-    num: "+50",
-    unit: "serviços",
-    title: "Portfólio completo",
-    text: "Soluções modulares que se adaptam ao contexto e à escala de cada parceiro.",
-  },
-  {
-    num: "4",
-    unit: "públicos",
-    title: "Atendimento integrado",
-    text: "Escolas, empresas, órgãos públicos e comunidades em um mesmo ecossistema.",
-  },
-  {
-    num: "100",
-    unit: "%",
-    title: "Metodologia vivencial",
-    text: "Aprendizagem ancorada na experiência direta com a natureza e o território.",
-  },
-  {
-    num: "BR",
-    unit: "·nacional",
-    title: "Atuação em todo o país",
-    text: "Raízes amazônicas, presença e parcerias em diferentes biomas brasileiros.",
-  },
-];
-
-export default function Differentials() {
+export default function Differentials({
+  data,
+}: {
+  data: SiteContent["differentials"];
+}) {
   return (
     <section className="diff" id="diferenciais">
       <div className="wrap">
         <div className="section-head">
           <div>
-            <span className="eyebrow">Diferenciais</span>
+            <span className="eyebrow">{data.eyebrow}</span>
             <h2>
-              Resultados que falam <i>por si.</i>
+              {data.titleLead}
+              <i>{data.titleEmphasis}</i>
             </h2>
           </div>
-          <p className="lead">
-            Combinamos rigor técnico, sensibilidade pedagógica e uma base
-            científica forte — formada por pesquisadoras com vivência prática em
-            campo.
-          </p>
+          <p className="lead">{data.lead}</p>
         </div>
 
         <div className="stats">
-          {STATS.map((stat, index) => (
+          {data.items.map((stat, index) => (
             <div
               key={stat.title}
               className={`stat reveal${index > 0 ? ` d${index}` : ""}`}

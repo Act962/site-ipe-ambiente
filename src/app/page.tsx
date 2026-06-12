@@ -9,22 +9,25 @@ import Gallery from "./_components/Gallery";
 import CtaFinal from "./_components/CtaFinal";
 import Footer from "./_components/Footer";
 import ScrollReveal from "./_components/ScrollReveal";
+import { getContent } from "@/content/get";
 
-export default function Home() {
+export default async function Home() {
+  const content = await getContent();
+
   return (
     <>
-      <Nav />
-      <Hero />
+      <Nav data={content.nav} />
+      <Hero data={content.hero} />
       <main>
-        <About />
-        <Values />
-        <Areas />
-        <Differentials />
-        <Esg />
-        <Gallery />
-        <CtaFinal />
+        <About data={content.about} />
+        <Values data={content.values} />
+        <Areas data={content.areas} />
+        <Differentials data={content.differentials} />
+        <Esg data={content.esg} />
+        <Gallery data={content.gallery} />
+        <CtaFinal data={content.ctaFinal} contact={content.contact} />
       </main>
-      <Footer />
+      <Footer data={content.footer} contact={content.contact} />
       <ScrollReveal />
     </>
   );

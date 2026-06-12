@@ -9,7 +9,7 @@
 }
 .about-img-stack .primary {
   position: absolute; inset: 0;
-  background-image: url('/assets/14.jpeg');
+  background-image: var(--bg, url('/assets/14.jpeg'));
   background-size: cover;
   background-position: center;
   border-radius: 4px;

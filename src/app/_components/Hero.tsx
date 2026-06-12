@@ -1,32 +1,31 @@
+import { bgVar } from "@/content/get";
+import type { SiteContent } from "@/content/defaults";
 import "@/styles/hero.css";
 
-export default function Hero() {
+export default function Hero({ data }: { data: SiteContent["hero"] }) {
   return (
     <header className="hero" id="top">
-      <div className="hero-img" />
+      <div className="hero-img" style={bgVar(data.bgImage)} />
       <div className="wrap">
         <div className="reveal in">
-          <span className="hero-eyebrow">Nascida na Amazônia · Atuação Nacional</span>
+          <span className="hero-eyebrow">{data.eyebrow}</span>
         </div>
         <h1 className="reveal in d1">
-          Educação ambiental que <i>transforma realidades.</i>
+          {data.titleLead}
+          <i>{data.titleEmphasis}</i>
         </h1>
-        <p className="lede reveal in d2">
-          Projetos, consultorias e experiências sustentáveis para escolas,
-          empresas, órgãos públicos e comunidades — construídos sobre ciência,
-          vivência e pertencimento.
-        </p>
+        <p className="lede reveal in d2">{data.lede}</p>
         <div className="hero-ctas reveal in d3">
-          <a href="#atuacao" className="btn btn-light">
-            Conheça nossos serviços
+          <a href={data.primaryCta.href} className="btn btn-light">
+            {data.primaryCta.label}
             <span className="arrow">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M5 12h14M13 5l7 7-7 7" />
               </svg>
             </span>
           </a>
-          <a href="#contato" className="btn btn-ghost">
-            Fale conosco
+          <a href={data.ghostCta.href} className="btn btn-ghost">
+            {data.ghostCta.label}
           </a>
         </div>
       </div>

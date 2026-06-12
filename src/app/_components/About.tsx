@@ -1,51 +1,36 @@
+import { bgVar } from "@/content/get";
+import type { SiteContent } from "@/content/defaults";
 import "@/styles/about.css";
 
-export default function About() {
+export default function About({ data }: { data: SiteContent["about"] }) {
   return (
     <section className="about" id="sobre">
       <div className="wrap">
         <div className="about-grid">
           <div className="about-img-stack reveal">
-            <div className="primary" />
+            <div className="primary" style={bgVar(data.image)} />
             <div className="badge">
-              <span className="num serif">+10</span>
-              <span className="lbl">
-                anos transformando conhecimento científico em prática socioambiental
-              </span>
+              <span className="num serif">{data.badgeNum}</span>
+              <span className="lbl">{data.badgeLabel}</span>
             </div>
           </div>
 
           <div className="about-body">
-            <span className="eyebrow reveal">Sobre a IPÊ</span>
+            <span className="eyebrow reveal">{data.eyebrow}</span>
             <h2 className="reveal d1">
-              Da floresta para o mundo. <i>Da ciência para a prática.</i>
+              {data.titleLead}
+              <i>{data.titleEmphasis}</i>
             </h2>
-            <p className="reveal d2">
-              A IPÊ Educação Ambiental nasceu na Amazônia, da união entre
-              pesquisadoras e educadoras ambientais que acreditam na potência da
-              educação como vetor de mudança real. Traduzimos conhecimento
-              científico em soluções práticas para promover sustentabilidade,
-              pertencimento e consciência ambiental.
-            </p>
-            <p className="reveal d3">
-              Atendemos escolas, empresas, órgãos públicos e comunidades em todo o
-              país — sempre com metodologias vivenciais, integrando teoria e
-              prática, raízes locais e visão global.
-            </p>
+            <p className="reveal d2">{data.paragraph1}</p>
+            <p className="reveal d3">{data.paragraph2}</p>
             <div className="mv-grid reveal d4">
               <div>
-                <h4>Missão</h4>
-                <p>
-                  Promover educação ambiental transformadora, conectando ciência,
-                  cultura e comunidade.
-                </p>
+                <h4>{data.missao.title}</h4>
+                <p>{data.missao.text}</p>
               </div>
               <div>
-                <h4>Visão</h4>
-                <p>
-                  Ser referência nacional em soluções socioambientais inspiradas na
-                  biodiversidade amazônica.
-                </p>
+                <h4>{data.visao.title}</h4>
+                <p>{data.visao.text}</p>
               </div>
             </div>
           </div>

@@ -1,33 +1,35 @@
+import { bgVar } from "@/content/get";
+import type { SiteContent } from "@/content/defaults";
 import "@/styles/cta.css";
 
-export default function CtaFinal() {
+export default function CtaFinal({
+  data,
+  contact,
+}: {
+  data: SiteContent["ctaFinal"];
+  contact: SiteContent["contact"];
+}) {
   return (
     <section className="cta-final" id="contato">
-      <div className="cta-bg" />
+      <div className="cta-bg" style={bgVar(data.bgImage)} />
       <div className="wrap">
-        <span className="eyebrow">Vamos construir juntos</span>
+        <span className="eyebrow">{data.eyebrow}</span>
         <h2>
-          Construindo um futuro <i>sustentável juntos.</i>
+          {data.titleLead}
+          <i>{data.titleEmphasis}</i>
         </h2>
-        <p>
-          Conte sobre seu projeto, sua escola, sua empresa ou seu município. Nós
-          ajudamos a transformar a intenção ambiental em prática consistente,
-          mensurável e inspiradora.
-        </p>
+        <p>{data.paragraph}</p>
         <div className="hero-ctas">
-          <a
-            href="mailto:contato@ipeeducacaoambiental.com.br"
-            className="btn btn-light"
-          >
-            Solicitar proposta
+          <a href={`mailto:${contact.email}`} className="btn btn-light">
+            {data.primaryCta.label}
             <span className="arrow">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M5 12h14M13 5l7 7-7 7" />
               </svg>
             </span>
           </a>
-          <a href="#galeria" className="btn btn-ghost">
-            Ver experiências
+          <a href={data.ghostCta.href} className="btn btn-ghost">
+            {data.ghostCta.label}
           </a>
         </div>
       </div>
