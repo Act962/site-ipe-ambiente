@@ -30,8 +30,15 @@ function merge<T>(base: T, override: unknown): T {
 
   if (Array.isArray(base)) {
     if (!Array.isArray(override)) return base;
-    // Contagens são fixas: faz o merge item a item, mantendo o padrão nos índices ausentes.
-    return base.map((item, i) => merge(item, override[i])) as T;
+    // Mesmo tamanho = o editor só mexeu nos textos: mescla item a item, de modo
+    // que um campo em branco continue voltando ao padrão.
+    if (override.length === base.length) {
+      return base.map((item, i) => merge(item, override[i])) as T;
+    }
+    // Tamanho diferente = o editor removeu ou acrescentou itens (ex.: um serviço
+    // que saiu do portfólio). Aqui a lista do painel vale integralmente — mesclar
+    // por índice traria de volta justamente o item apagado.
+    return override as T;
   }
 
   if (isPlainObject(base)) {

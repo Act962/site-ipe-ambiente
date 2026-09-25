@@ -20,6 +20,38 @@ export function setPath<T>(obj: T, path: string, value: unknown): T {
   return { ...current, [key]: newChild } as T;
 }
 
+/* ───────── helper: lê um caminho ("items.0.bullets") ───────── */
+export function getPath(obj: unknown, path: string): unknown {
+  return path
+    .split(".")
+    .reduce<unknown>(
+      (acc, key) =>
+        acc == null ? undefined : (acc as Record<string, unknown>)[key],
+      obj,
+    );
+}
+
+/* ───────── operações sobre listas abertas (remover/mover/acrescentar) ───────── */
+export const listOps = {
+  remove:
+    (index: number) =>
+    <T,>(list: T[]): T[] =>
+      list.filter((_, i) => i !== index),
+  move:
+    (index: number, direction: -1 | 1) =>
+    <T,>(list: T[]): T[] => {
+      const target = index + direction;
+      if (target < 0 || target >= list.length) return list;
+      const copy = list.slice();
+      [copy[index], copy[target]] = [copy[target], copy[index]];
+      return copy;
+    },
+  add:
+    <I,>(item: I) =>
+    <T,>(list: T[]): T[] =>
+      [...list, item as unknown as T],
+};
+
 /* ───────── estado de edição de uma seção ───────── */
 type Status = "idle" | "saving" | "saved" | "error";
 type Patch = Parameters<typeof saveContent>[0];
@@ -34,6 +66,12 @@ export function useSectionForm<K extends keyof SiteContent>(
 
   const set = (path: string, value: unknown) => {
     setDraft((d) => setPath(d, path, value));
+    setStatus("idle");
+  };
+
+  /** Edita uma lista aberta do rascunho — use com `listOps`. */
+  const setList = <I,>(path: string, fn: (list: I[]) => I[]) => {
+    setDraft((d) => setPath(d, path, fn(getPath(d, path) as I[])));
     setStatus("idle");
   };
 
@@ -62,7 +100,7 @@ export function useSectionForm<K extends keyof SiteContent>(
     }
   };
 
-  return { draft, set, save, reset, status, error };
+  return { draft, set, setList, save, reset, status, error };
 }
 
 /* ───────── primitivas de UI ───────── */
@@ -98,6 +136,115 @@ export function TextField({
       )}
       {hint ? <span className="af-hint">{hint}</span> : null}
     </label>
+  );
+}
+
+export function SelectField({
+  label,
+  value,
+  options,
+  onChange,
+}: {
+  label: string;
+  value: string;
+  options: { value: string; label: string }[];
+  onChange: (v: string) => void;
+}) {
+  return (
+    <label className="af-field">
+      <span className="af-label">{label}</span>
+      <select
+        className="af-input"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+      >
+        {options.map((o) => (
+          <option key={o.value} value={o.value}>
+            {o.label}
+          </option>
+        ))}
+      </select>
+    </label>
+  );
+}
+
+type RowControls = {
+  onMoveUp: () => void;
+  onMoveDown: () => void;
+  onRemove: () => void;
+  removeLabel: string;
+  first: boolean;
+  last: boolean;
+};
+
+/** Trio mover-para-cima / mover-para-baixo / remover, de um item de lista aberta. */
+export function RowActions({
+  onMoveUp,
+  onMoveDown,
+  onRemove,
+  removeLabel,
+  first,
+  last,
+}: RowControls) {
+  return (
+    <div className="af-row-actions">
+      <button
+        type="button"
+        className="af-icon-btn"
+        onClick={onMoveUp}
+        disabled={first}
+        title="Mover para cima"
+        aria-label="Mover para cima"
+      >
+        ↑
+      </button>
+      <button
+        type="button"
+        className="af-icon-btn"
+        onClick={onMoveDown}
+        disabled={last}
+        title="Mover para baixo"
+        aria-label="Mover para baixo"
+      >
+        ↓
+      </button>
+      <button
+        type="button"
+        className="af-icon-btn af-icon-danger"
+        onClick={onRemove}
+        title={removeLabel}
+        aria-label={removeLabel}
+      >
+        ✕
+      </button>
+    </div>
+  );
+}
+
+/** Uma linha de lista aberta: o campo à esquerda, os controles à direita. */
+export function ListRow({
+  children,
+  ...controls
+}: RowControls & { children: ReactNode }) {
+  return (
+    <div className="af-row">
+      <div className="af-row-main">{children}</div>
+      <RowActions {...controls} />
+    </div>
+  );
+}
+
+export function AddButton({
+  onClick,
+  children,
+}: {
+  onClick: () => void;
+  children: ReactNode;
+}) {
+  return (
+    <button type="button" className="af-add" onClick={onClick}>
+      + {children}
+    </button>
   );
 }
 
@@ -197,14 +344,18 @@ export function SectionCard({
 /** Sub-bloco rotulado para itens repetidos (um valor, uma área, um tile…). */
 export function ItemGroup({
   title,
+  actions,
   children,
 }: {
   title: string;
+  /** Controles do bloco inteiro (mover, remover) — só nas listas abertas. */
+  actions?: ReactNode;
   children: ReactNode;
 }) {
   return (
     <fieldset className="af-group">
       <legend>{title}</legend>
+      {actions ? <div className="af-group-actions">{actions}</div> : null}
       {children}
     </fieldset>
   );

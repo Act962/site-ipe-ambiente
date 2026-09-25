@@ -14,15 +14,29 @@
   background-size: cover;
   background-position: center 35%;
   transform: scale(1.04);
+  filter: saturate(1.06);
 }
+/* Véu mínimo: escurece só onde há texto (topo, pelo menu; base, pelo título e
+   CTAs) e deixa o miolo da foto — floresta e céu — em cor plena. Não existe
+   faixa lateral: era ela que dava aspecto de fumaça sobre o verde. */
 .hero-img::after {
   content: "";
   position: absolute; inset: 0;
-  background:
-    linear-gradient(180deg, rgba(15,58,37,.45) 0%, rgba(15,58,37,.15) 35%, rgba(15,58,37,.85) 100%),
-    linear-gradient(90deg, rgba(15,58,37,.45) 0%, rgba(15,58,37,0) 60%);
+  background: linear-gradient(
+    180deg,
+    rgba(15,58,37,.28) 0%,
+    rgba(15,58,37,0) 22%,
+    rgba(15,58,37,0) 34%,
+    rgba(10,38,24,.88) 100%
+  );
 }
 .hero .wrap { position: relative; z-index: 2; width: 100%; }
+
+/* Com a foto em cor plena, o texto branco cruza o céu claro no horizonte. A
+   legibilidade vem de uma sombra difusa no próprio texto — não de escurecer a
+   imagem, que era justamente o que apagava o verde. */
+.hero-eyebrow, .hero h1, .hero p.lede { text-shadow: 0 1px 14px rgba(8,30,19,.5); }
+.hero h1 { text-shadow: 0 2px 20px rgba(8,30,19,.55); }
 
 .hero-eyebrow {
   color: rgba(255,255,255,.85);

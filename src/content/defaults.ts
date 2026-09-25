@@ -14,6 +14,22 @@
 
 export type Link = { href: string; label: string };
 
+/**
+ * Ícones disponíveis para os cards de Áreas de Atuação. O desenho SVG mora em
+ * `Areas.tsx`; aqui fica só a chave, porque a área agora pode ser removida ou
+ * acrescentada pelo painel e a posição na lista deixou de identificar o ícone.
+ */
+export const AREA_ICON_KEYS = ["educacao", "publico", "empresa", "material"] as const;
+export type AreaIcon = (typeof AREA_ICON_KEYS)[number];
+
+/** Rótulos do seletor de ícone no painel. */
+export const AREA_ICON_LABELS: Record<AreaIcon, string> = {
+  educacao: "Camadas — educacional",
+  publico: "Prédio com telhado — órgãos públicos",
+  empresa: "Edifício — empresarial",
+  material: "Livro — materiais",
+};
+
 export type SiteContent = {
   nav: {
     logo: string;
@@ -53,8 +69,15 @@ export type SiteContent = {
     titleLead: string;
     titleEmphasis: string;
     lead: string;
-    /** A ordem dos itens casa com os ícones SVG fixos em Areas.tsx (por índice). */
-    items: { tag: string; title: string; description: string; bullets: string[] }[];
+    /** Lista aberta: o painel pode remover, acrescentar e reordenar áreas. */
+    items: {
+      icon: AreaIcon;
+      tag: string;
+      title: string;
+      description: string;
+      /** Lista aberta: o painel pode remover e acrescentar serviços. */
+      bullets: string[];
+    }[];
   };
   differentials: {
     eyebrow: string;
@@ -205,6 +228,7 @@ export const DEFAULTS: SiteContent = {
       "Mais de 50 serviços organizados em quatro frentes — combinados para atender desde uma horta escolar até políticas públicas de larga escala e projetos ESG corporativos.",
     items: [
       {
+        icon: "educacao",
         tag: "A · Educacionais",
         title: "Serviços Educacionais",
         description:
@@ -218,6 +242,7 @@ export const DEFAULTS: SiteContent = {
         ],
       },
       {
+        icon: "publico",
         tag: "B · Órgãos Públicos",
         title: "Serviços para Órgãos Públicos",
         description:
@@ -231,6 +256,7 @@ export const DEFAULTS: SiteContent = {
         ],
       },
       {
+        icon: "empresa",
         tag: "C · Empresariais",
         title: "Serviços Empresariais",
         description:
@@ -244,6 +270,7 @@ export const DEFAULTS: SiteContent = {
         ],
       },
       {
+        icon: "material",
         tag: "D · Materiais",
         title: "Materiais Educativos",
         description:
