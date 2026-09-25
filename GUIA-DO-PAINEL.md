@@ -53,7 +53,30 @@ Cada card tem os campos daquela seção e, no rodapé, dois botões:
 
 ---
 
-## 5. Voltar ao texto/imagem original
+## 5. Remover e acrescentar serviços (Áreas de Atuação)
+
+No card **Áreas de Atuação**, cada serviço da lista tem três botões à direita:
+
+| Botão | O que faz |
+|---|---|
+| **↑ ↓** | muda a ordem do serviço dentro da área |
+| **✕** | tira aquele serviço do site |
+| **+ Adicionar serviço** | abre um campo em branco para incluir um novo |
+
+Os mesmos botões aparecem no **canto superior de cada área**, e valem para a área
+inteira — dá para tirar um dos cards do ar ou criar um novo em **+ Adicionar
+área** (preenchendo etiqueta, título, ícone, descrição e os serviços).
+
+> ⚠️ Nada disso vale antes de clicar em **Salvar seção**. Se removeu algo sem
+> querer, saia da página sem salvar — ou use **Restaurar padrão** para trazer a
+> lista original de volta.
+
+Atenção: **apagar o texto de um serviço não o remove** — campo em branco volta ao
+texto original (veja abaixo). Para tirar do site, use o **✕**.
+
+---
+
+## 6. Voltar ao texto/imagem original
 
 - **Apagar um campo de texto** e salvar → aquele campo volta ao **texto padrão**.
 - **Restaurar padrão** (no rodapé do card) → desfaz **todas** as edições daquela
@@ -61,11 +84,13 @@ Cada card tem os campos daquela seção e, no rodapé, dois botões:
 
 ---
 
-## 6. Coisas importantes
+## 7. Coisas importantes
 
 - ✅ Você pode mudar **textos e imagens** à vontade.
-- 🔒 A **estrutura é fixa**: não dá para adicionar ou remover seções, valores,
-  fotos da galeria etc. — isso protege o layout do site.
+- ✂️ Em **Áreas de Atuação**, também dá para **remover, reordenar e acrescentar**
+  serviços e áreas inteiras (seção 5).
+- 🔒 Nas **demais seções** a estrutura é fixa: não dá para adicionar ou remover
+  seções, valores, fotos da galeria etc. — isso protege o layout do site.
 - 💾 As mudanças valem por seção: edite o que quiser num card e clique em
   **Salvar seção**. Salvar uma seção não afeta as outras.
 - 🚪 Ao terminar, clique em **Sair** (canto superior direito).

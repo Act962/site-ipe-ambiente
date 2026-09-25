@@ -1,12 +1,21 @@
 "use client";
 
-import type { SiteContent } from "@/content/defaults";
+import {
+  AREA_ICON_KEYS,
+  AREA_ICON_LABELS,
+  type SiteContent,
+} from "@/content/defaults";
 import {
   useSectionForm,
   SectionCard,
   TextField,
+  SelectField,
   ImageField,
   ItemGroup,
+  ListRow,
+  RowActions,
+  AddButton,
+  listOps,
 } from "./form-kit";
 
 /* ───────────────── NAV ───────────────── */
@@ -99,8 +108,23 @@ function ValuesForm({ value }: { value: SiteContent["values"] }) {
 }
 
 /* ───────────────── ÁREAS ───────────────── */
+const ICON_OPTIONS = AREA_ICON_KEYS.map((key) => ({
+  value: key,
+  label: AREA_ICON_LABELS[key],
+}));
+
+/** Área acrescentada pelo painel — campos em branco, prontos para preencher. */
+const NEW_AREA: SiteContent["areas"]["items"][number] = {
+  icon: "educacao",
+  tag: "",
+  title: "",
+  description: "",
+  bullets: [""],
+};
+
 function AreasForm({ value }: { value: SiteContent["areas"] }) {
-  const { draft, set, save, reset, status, error } = useSectionForm("areas", value);
+  const { draft, set, setList, save, reset, status, error } = useSectionForm("areas", value);
+  const areas = draft.items;
   return (
     <SectionCard id="sec-areas" eyebrow="Serviços" title="Áreas de Atuação" status={status} error={error} onSave={save} onReset={reset}>
       <TextField label="Selo" value={draft.eyebrow} onChange={(v) => set("eyebrow", v)} />
@@ -109,18 +133,54 @@ function AreasForm({ value }: { value: SiteContent["areas"] }) {
         <TextField label="Título — destaque" value={draft.titleEmphasis} onChange={(v) => set("titleEmphasis", v)} />
       </div>
       <TextField label="Texto de apoio" value={draft.lead} onChange={(v) => set("lead", v)} multiline />
-      {draft.items.map((area, i) => (
-        <ItemGroup key={i} title={area.title}>
+      <p className="af-note">
+        O ✕ tira o serviço (ou a área inteira) do site, e “+ Adicionar” abre um
+        campo em branco para incluir um novo. As mudanças valem depois de{" "}
+        <strong>Salvar seção</strong>; <strong>Restaurar padrão</strong> traz de
+        volta a lista original.
+      </p>
+      {areas.map((area, i) => (
+        <ItemGroup
+          key={i}
+          title={area.title.trim() || "Nova área"}
+          actions={
+            <RowActions
+              first={i === 0}
+              last={i === areas.length - 1}
+              onMoveUp={() => setList("items", listOps.move(i, -1))}
+              onMoveDown={() => setList("items", listOps.move(i, 1))}
+              onRemove={() => setList("items", listOps.remove(i))}
+              removeLabel="Remover esta área do site"
+            />
+          }
+        >
           <div className="af-cols">
             <TextField label="Etiqueta" value={area.tag} onChange={(v) => set(`items.${i}.tag`, v)} />
             <TextField label="Título" value={area.title} onChange={(v) => set(`items.${i}.title`, v)} />
           </div>
+          <SelectField label="Ícone" value={area.icon} options={ICON_OPTIONS} onChange={(v) => set(`items.${i}.icon`, v)} />
           <TextField label="Descrição" value={area.description} onChange={(v) => set(`items.${i}.description`, v)} multiline />
           {area.bullets.map((b, j) => (
-            <TextField key={j} label={`Item ${j + 1}`} value={b} onChange={(v) => set(`items.${i}.bullets.${j}`, v)} />
+            <ListRow
+              key={j}
+              first={j === 0}
+              last={j === area.bullets.length - 1}
+              onMoveUp={() => setList(`items.${i}.bullets`, listOps.move(j, -1))}
+              onMoveDown={() => setList(`items.${i}.bullets`, listOps.move(j, 1))}
+              onRemove={() => setList(`items.${i}.bullets`, listOps.remove(j))}
+              removeLabel="Remover este serviço"
+            >
+              <TextField label={`Serviço ${j + 1}`} value={b} onChange={(v) => set(`items.${i}.bullets.${j}`, v)} />
+            </ListRow>
           ))}
+          <AddButton onClick={() => setList(`items.${i}.bullets`, listOps.add(""))}>
+            Adicionar serviço
+          </AddButton>
         </ItemGroup>
       ))}
+      <AddButton onClick={() => setList("items", listOps.add(structuredClone(NEW_AREA)))}>
+        Adicionar área
+      </AddButton>
     </SectionCard>
   );
 }

@@ -5,6 +5,9 @@
   grid-template-columns: repeat(2, 1fr);
   gap: 24px;
 }
+/* Com um número ímpar de áreas (o painel pode remover), o último card ocuparia
+   metade da linha e deixaria um vão — aqui ele estica e fecha a grade. */
+.area-grid > .area:last-child:nth-child(odd) { grid-column: 1 / -1; }
 .area {
   background: #fff;
   border: 1px solid var(--line);
