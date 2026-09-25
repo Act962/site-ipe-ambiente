@@ -1,5 +1,6 @@
-/** Seções do editor, na ordem do site. Usada pela sidebar (âncoras + scroll-spy)
- *  e pelos `id` dos cards em Editor.tsx — manter em sincronia. */
+/** Seções do editor, na ordem do site. Cada `id` é `sec-<chave em SiteContent>`:
+ *  as abas (Sidebar/MobileNav) usam a lista, e `SectionCard`/`useSectionForm`
+ *  derivam o mesmo id da chave da seção — manter o padrão. */
 export const ADMIN_SECTIONS = [
   { id: "sec-nav", label: "Navegação" },
   { id: "sec-hero", label: "Hero" },
@@ -13,3 +14,5 @@ export const ADMIN_SECTIONS = [
   { id: "sec-contact", label: "Contato" },
   { id: "sec-footer", label: "Rodapé" },
 ] as const;
+
+export type SectionId = (typeof ADMIN_SECTIONS)[number]["id"];

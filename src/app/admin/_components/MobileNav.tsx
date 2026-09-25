@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ADMIN_SECTIONS } from "./sections";
-import { useActiveSection } from "./useActiveSection";
+import { ADMIN_SECTIONS, type SectionId } from "./sections";
+import { useTabs } from "./tabs";
 
-/** Menu suspenso de navegação entre seções — usado em telas estreitas. */
+/** Seletor de aba em menu suspenso — usado em telas estreitas. */
 export default function MobileNav() {
-  const active = useActiveSection();
+  const { active, select, dirty } = useTabs();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -20,9 +20,9 @@ export default function MobileNav() {
     return () => document.removeEventListener("mousedown", onDown);
   }, [open]);
 
-  const go = (id: string) => {
+  const go = (id: SectionId) => {
     setOpen(false);
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    select(id);
   };
 
   const activeLabel =
@@ -37,7 +37,7 @@ export default function MobileNav() {
         onClick={() => setOpen((o) => !o)}
       >
         <span className="admin-nav-toggle-label">
-          <span className="af-eyebrow">Ir para a seção</span>
+          <span className="af-eyebrow">Seção</span>
           {activeLabel}
         </span>
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -55,6 +55,9 @@ export default function MobileNav() {
                 onClick={() => go(section.id)}
               >
                 {section.label}
+                {dirty.has(section.id) ? (
+                  <span className="admin-dirty" title="Alterações não salvas" aria-label="alterações não salvas" />
+                ) : null}
               </button>
             </li>
           ))}

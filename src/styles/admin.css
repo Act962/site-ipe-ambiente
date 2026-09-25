@@ -177,8 +177,17 @@
   flex-direction: column;
   gap: 2px;
 }
-.admin-sidebar a {
-  display: block;
+.admin-sidebar button {
+  font: inherit;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
   padding: 7px 12px;
   border-radius: 8px;
   font-size: 14px;
@@ -186,12 +195,21 @@
   border-left: 2px solid transparent;
   transition: background 0.12s ease, color 0.12s ease;
 }
-.admin-sidebar a:hover { background: var(--green-50); color: var(--green-900); }
-.admin-sidebar a.active {
+.admin-sidebar button:hover { background: var(--green-50); color: var(--green-900); }
+.admin-sidebar button.active {
   background: var(--green-50);
   color: var(--green-900);
   font-weight: 600;
   border-left-color: var(--green-600);
+}
+
+/* Seção com edição ainda não salva (nas abas e no menu do celular). */
+.admin-dirty {
+  width: 7px;
+  height: 7px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--rust);
 }
 
 /* Menu suspenso de seções (telas estreitas) — oculto no desktop */
@@ -238,6 +256,10 @@
   overflow: auto;
 }
 .admin-nav-menu li button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
   font: inherit;
   cursor: pointer;
   width: 100%;
@@ -293,7 +315,6 @@
 .card {
   /* Zera o padding global de `section { padding: 130px 0 }` (globals.css). */
   padding: 0;
-  scroll-margin-top: 84px; /* âncora da sidebar não fica atrás da barra fixa */
   background: #fff;
   border: 1px solid var(--line);
   border-radius: 14px;

@@ -1,8 +1,10 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { DEFAULTS, type SiteContent } from "@/content/defaults";
 import { saveContent, uploadImage } from "@/content/actions";
+import type { SectionId } from "./sections";
+import { useTabs } from "./tabs";
 
 /* ───────── helper: set imutável por caminho ("items.0.title") ───────── */
 export function setPath<T>(obj: T, path: string, value: unknown): T {
@@ -61,6 +63,8 @@ export function useSectionForm<K extends keyof SiteContent>(
   initial: SiteContent[K],
 ) {
   const [draft, setDraft] = useState<SiteContent[K]>(initial);
+  // Último estado gravado: o rascunho está "sujo" enquanto for diferente dele.
+  const [baseline, setBaseline] = useState<SiteContent[K]>(initial);
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string | null>(null);
 
@@ -80,6 +84,7 @@ export function useSectionForm<K extends keyof SiteContent>(
     setError(null);
     try {
       await saveContent({ [section]: draft } as Patch);
+      setBaseline(draft);
       setStatus("saved");
     } catch {
       setStatus("error");
@@ -92,13 +97,22 @@ export function useSectionForm<K extends keyof SiteContent>(
     setError(null);
     try {
       await saveContent({ [section]: {} } as Patch);
-      setDraft(structuredClone(DEFAULTS[section]));
+      const restored = structuredClone(DEFAULTS[section]);
+      setDraft(restored);
+      setBaseline(restored);
       setStatus("saved");
     } catch {
       setStatus("error");
       setError("Não foi possível restaurar o padrão.");
     }
   };
+
+  // Avisa as abas, que marcam a seção com edição pendente.
+  const { setDirty } = useTabs();
+  const isDirty = JSON.stringify(draft) !== JSON.stringify(baseline);
+  useEffect(() => {
+    setDirty(`sec-${String(section)}` as SectionId, isDirty);
+  }, [section, isDirty, setDirty]);
 
   return { draft, set, setList, save, reset, status, error };
 }
@@ -312,9 +326,11 @@ export function SectionCard({
   onReset: () => void;
   children: ReactNode;
 }) {
+  const { active } = useTabs();
   const busy = status === "saving";
+  // Só a aba ativa aparece; as outras ficam montadas (e com o rascunho) mas ocultas.
   return (
-    <section id={id} className="card">
+    <section id={id} className="card" hidden={id !== active}>
       <div className="card-head">
         <span className="af-eyebrow">{eyebrow}</span>
         <h2>{title}</h2>

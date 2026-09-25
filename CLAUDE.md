@@ -51,7 +51,7 @@ SEO identity (`SITE_URL` from `NEXT_PUBLIC_SITE_URL`, name, title, description, 
 - One editor only, with credentials in env vars: `ADMIN_EMAIL` + `ADMIN_PASSWORD_HASH`. The hash is stored in base64 because a raw `$2b$12$…` hash gets corrupted by `.env` variable expansion. `credentials.ts` also accepts a raw hash.
 - Sessions are HS256 JWTs (`jose`) stored in the HttpOnly cookie `ipe_session`, lasting 7 days. `server/auth/jwt.ts` deliberately avoids `server-only`/`next/headers` so that `proxy.ts` can import it.
 - `src/proxy.ts` (matcher `/admin/:path*`) is only an optimistic redirect. The real check is `verifySession()` from `server/auth/dal.ts`, which **must be called at the top of every protected page and Server Action**.
-- `admin/_components/sections.ts` holds the sidebar's section list. Its `id`s must stay in sync with the `SectionCard` ids in `Editor.tsx`.
+- The panel is **tabbed**: `tabs.tsx` (`TabsProvider`/`useTabs`) holds the active section and the set with unsaved edits. `Sidebar` and `MobileNav` switch tabs; `SectionCard` renders with `hidden` unless it is the active one — every form stays **mounted**, so a draft survives switching tabs (don't conditionally render the forms). `useSectionForm` compares the draft against the last saved state and reports it, which drives the red dot on the tab. Section ids follow `sec-<SiteContent key>` (`sections.ts`); `useSectionForm` derives the id from the key, so keep that pattern.
 - `GUIA-DO-PAINEL.md` is the client-facing user guide (pt-BR). `docs/DEPLOY.md` is the deploy and env-var checklist.
 
 ### Styling
