@@ -306,7 +306,8 @@
 .admin-intro p { max-width: 60ch; }
 
 .editor {
-  padding: 8px 0 96px;
+  /* Folga no fim: a barra de salvar flutua por cima do pé da página. */
+  padding: 8px 0 150px;
   display: flex;
   flex-direction: column;
   gap: 26px;
@@ -338,15 +339,125 @@
   flex-direction: column;
   gap: 16px;
 }
-.card-foot {
+/* ────────── BARRA DE SALVAR (flutuante) ────────── */
+/* Fixa no pé da tela. O dock ocupa a largura toda e repete `.admin-layout`
+   por dentro, de modo que a barra caia exatamente sob a coluna do card. */
+.savebar-dock {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 20px;
+  z-index: 30;
+  pointer-events: none;
+}
+.savebar {
+  pointer-events: auto;
+  grid-column: 2;
   display: flex;
   align-items: center;
-  gap: 18px;
-  padding: 16px 24px;
-  border-top: 1px solid var(--line);
-  background: var(--paper);
+  gap: 16px;
+  padding: 12px 14px 12px 20px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow:
+    0 18px 44px -18px rgba(15, 58, 37, 0.45),
+    0 2px 6px rgba(15, 58, 37, 0.06);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
-.card-foot .admin-btn { padding: 10px 20px; }
+.savebar.dirty,
+.savebar.error {
+  border-color: var(--rust);
+  box-shadow:
+    0 18px 44px -18px rgba(183, 97, 58, 0.5),
+    0 0 0 3px #fbeee8;
+}
+.savebar-state {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+}
+.savebar-state strong { color: var(--green-900); white-space: nowrap; }
+.savebar-dot {
+  width: 9px;
+  height: 9px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--green-500);
+}
+.savebar-msg {
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.savebar.dirty .savebar-dot,
+.savebar.error .savebar-dot { background: var(--rust); }
+.savebar.dirty .savebar-msg,
+.savebar.error .savebar-msg { color: var(--rust); font-weight: 600; }
+.savebar.saved .savebar-msg { color: var(--green-600); font-weight: 600; }
+.savebar .admin-btn { padding: 10px 20px; flex: none; }
+.savebar .admin-btn:disabled { opacity: 0.45; cursor: default; }
+.savebar .admin-link { flex: none; }
+.savebar .admin-link:disabled { opacity: 0.45; cursor: default; }
+
+@media (max-width: 920px) {
+  .savebar-dock { bottom: 12px; }
+  .savebar { grid-column: 1; flex-wrap: wrap; gap: 10px; padding: 12px 14px; }
+  .savebar-state { flex-basis: 100%; }
+  .savebar .admin-btn { flex: 1; }
+}
+
+/* ────────── AVISO DE EDIÇÃO PENDENTE ────────── */
+.admin-veil {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(15, 58, 37, 0.35);
+  backdrop-filter: blur(2px);
+}
+.admin-dialog {
+  width: 100%;
+  max-width: 440px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 26px 26px 22px;
+  box-shadow: 0 30px 70px -30px rgba(15, 58, 37, 0.6);
+}
+.admin-dialog h2 {
+  font-family: var(--font-serif-stack);
+  font-weight: 400;
+  font-size: 26px;
+  line-height: 1.1;
+  color: var(--green-900);
+  margin: 6px 0 10px;
+}
+.admin-dialog p { margin: 0 0 20px; font-size: 15px; color: var(--ink-soft); }
+.admin-dialog p.af-error { margin-top: -8px; font-size: 14px; color: var(--rust); }
+.admin-dialog-actions { display: flex; flex-direction: column; gap: 10px; }
+.admin-dialog-actions .admin-btn { padding: 10px 20px; }
+.admin-btn-ghost {
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 10px 20px;
+  border-radius: 9px;
+  background: #fff;
+  border: 1px solid var(--line);
+  color: var(--ink-soft);
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.admin-btn-ghost:hover:not(:disabled) { border-color: var(--green-500); background: var(--green-50); }
+.admin-btn-ghost:disabled { opacity: 0.6; cursor: progress; }
+.admin-btn-danger { color: var(--rust); }
+.admin-btn-danger:hover:not(:disabled) { border-color: var(--rust); background: #fbf1ec; }
 
 .af-eyebrow {
   font-family: var(--font-mono-stack);
@@ -456,5 +567,4 @@
 }
 .af-image-controls { display: flex; flex-direction: column; gap: 6px; font-size: 13px; }
 
-.af-saved { font-size: 14px; font-weight: 600; color: var(--green-600); }
 .af-error { font-size: 13px; color: var(--rust); }

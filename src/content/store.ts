@@ -32,25 +32,38 @@ function client(): Redis | null {
   return new Redis({ url, token });
 }
 
-/** Lê os overrides atuais. Sem KV configurado, opera em modo só-padrões. */
+const NOT_CONFIGURED =
+  "Armazenamento de conteúdo não configurado: defina KV_REST_API_URL e KV_REST_API_TOKEN.";
+
+/**
+ * Lê os overrides para RENDERIZAR. Tolerante: sem KV configurado ou com o KV
+ * fora do ar, devolve `{}` e o site aparece com os padrões. Nunca use o
+ * resultado como base de uma gravação — para isso existe `readOverridesOrThrow`.
+ */
 export async function readOverrides(): Promise<ContentOverrides> {
-  const redis = client();
-  if (!redis) return {};
+  if (!client()) return {};
   try {
-    const data = await redis.get<ContentOverrides>(KEY);
-    return data ?? {};
+    return await readOverridesOrThrow();
   } catch {
     return {};
   }
 }
 
+/**
+ * Lê os overrides para GRAVAR por cima (ler-modificar-gravar). Estrita: `{}` só
+ * quando a chave realmente não existe; qualquer falha de leitura é propagada,
+ * para que um erro passageiro não vire um documento vazio regravado.
+ */
+export async function readOverridesOrThrow(): Promise<ContentOverrides> {
+  const redis = client();
+  if (!redis) throw new Error(NOT_CONFIGURED);
+  const data = await redis.get<ContentOverrides>(KEY);
+  return data ?? {};
+}
+
 /** Grava os overrides (documento único). */
 export async function writeOverrides(overrides: ContentOverrides): Promise<void> {
   const redis = client();
-  if (!redis) {
-    throw new Error(
-      "Armazenamento de conteúdo não configurado: defina KV_REST_API_URL e KV_REST_API_TOKEN.",
-    );
-  }
+  if (!redis) throw new Error(NOT_CONFIGURED);
   await redis.set(KEY, overrides);
 }
