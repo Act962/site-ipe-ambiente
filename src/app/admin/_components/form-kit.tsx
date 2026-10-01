@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { DEFAULTS, type SiteContent } from "@/content/defaults";
 import { upload } from "@vercel/blob/client";
 import { saveContent } from "@/content/actions";
@@ -60,6 +60,9 @@ export const listOps = {
 type Status = "idle" | "saving" | "saved" | "error";
 type Patch = Parameters<typeof saveContent>[0];
 
+/** Quanto tempo o "Salvo ✓" fica na tela antes de a barra de salvar sumir. */
+const SAVED_FLASH_MS = 2500;
+
 export function useSectionForm<K extends keyof SiteContent>(
   section: K,
   initial: SiteContent[K],
@@ -69,6 +72,17 @@ export function useSectionForm<K extends keyof SiteContent>(
   const [baseline, setBaseline] = useState<SiteContent[K]>(initial);
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string | null>(null);
+
+  // "Salvo ✓" é passageiro: volta sozinho a "idle", e a barra de salvar some.
+  const savedTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const flashSaved = () => {
+    if (savedTimer.current) clearTimeout(savedTimer.current);
+    setStatus("saved");
+    savedTimer.current = setTimeout(
+      () => setStatus((s) => (s === "saved" ? "idle" : s)),
+      SAVED_FLASH_MS,
+    );
+  };
 
   const set = (path: string, value: unknown) => {
     setDraft((d) => setPath(d, path, value));
@@ -88,7 +102,7 @@ export function useSectionForm<K extends keyof SiteContent>(
     try {
       await saveContent({ [section]: draft } as Patch);
       setBaseline(draft);
-      setStatus("saved");
+      flashSaved();
       return true;
     } catch {
       setStatus("error");
@@ -112,7 +126,7 @@ export function useSectionForm<K extends keyof SiteContent>(
       const restored = structuredClone(DEFAULTS[section]);
       setDraft(restored);
       setBaseline(restored);
-      setStatus("saved");
+      flashSaved();
     } catch {
       setStatus("error");
       setError("Não foi possível restaurar o padrão.");
@@ -361,8 +375,10 @@ export function SectionCard({
   const busy = status === "saving";
   const isDirty = dirty.has(id as SectionId);
 
+  // A barra só existe enquanto há o que dizer: edição pendente, gravação em
+  // curso, erro ou o "Salvo ✓" passageiro. Seção intocada = sem barra.
   let state = "";
-  let message = "Sem alterações pendentes";
+  let message = "";
   if (busy) message = "Salvando…";
   else if (status === "error") {
     state = " error";
@@ -379,41 +395,47 @@ export function SectionCard({
   return (
     <section id={id} className="card" hidden={id !== active}>
       <div className="card-head">
-        <span className="af-eyebrow">{eyebrow}</span>
-        <h2>{title}</h2>
+        <div>
+          <span className="af-eyebrow">{eyebrow}</span>
+          <h2>{title}</h2>
+        </div>
+        <button
+          type="button"
+          className="admin-link"
+          onClick={onReset}
+          disabled={busy}
+        >
+          Restaurar padrão
+        </button>
       </div>
       <div className="card-body">{children}</div>
       {/* Barra de salvar: fixa no pé da tela, para não depender de rolar a seção
           inteira. O dock repete a grade do painel e a alinha à coluna do card. */}
-      <div className="savebar-dock">
-        <div className="admin-layout">
-          <div className={`savebar${state}`}>
-            <div className="savebar-state">
-              <span className="savebar-dot" />
-              <strong>{title}</strong>
-              <span className="savebar-msg" role="status">
-                {message}
-              </span>
+      {message ? (
+        <div className="savebar-dock">
+          <div className="admin-layout">
+            <div className={`savebar${state}`}>
+              <div className="savebar-state">
+                <span className="savebar-dot" />
+                <strong>{title}</strong>
+                <span className="savebar-msg" role="status">
+                  {message}
+                </span>
+              </div>
+              {isDirty || busy ? (
+                <button
+                  type="button"
+                  className="admin-btn"
+                  onClick={onSave}
+                  disabled={busy}
+                >
+                  Salvar seção
+                </button>
+              ) : null}
             </div>
-            <button
-              type="button"
-              className="admin-link"
-              onClick={onReset}
-              disabled={busy}
-            >
-              Restaurar padrão
-            </button>
-            <button
-              type="button"
-              className="admin-btn"
-              onClick={onSave}
-              disabled={busy || !isDirty}
-            >
-              Salvar seção
-            </button>
           </div>
         </div>
-      </div>
+      ) : null}
     </section>
   );
 }
