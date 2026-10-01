@@ -322,10 +322,16 @@
   overflow: hidden;
 }
 .card-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
   padding: 20px 24px 14px;
   border-bottom: 1px solid var(--line);
   background: var(--green-50);
 }
+.card-head .admin-link { flex: none; font-size: 13px; padding-bottom: 3px; }
+.card-head .admin-link:disabled { opacity: 0.45; cursor: default; }
 .card-head h2 {
   font-family: var(--font-serif-stack);
   font-size: 24px;
@@ -364,7 +370,17 @@
     0 18px 44px -18px rgba(15, 58, 37, 0.45),
     0 2px 6px rgba(15, 58, 37, 0.06);
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  /* A barra só é montada quando há edição: entra subindo do pé da tela. */
+  animation: savebar-in 0.22s ease-out;
 }
+@keyframes savebar-in {
+  from { opacity: 0; transform: translateY(14px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .savebar { animation: none; }
+}
+/* "Salvo ✓" sem botão: mesma altura da barra com o botão. */
+.savebar.saved { padding-top: 21px; padding-bottom: 21px; }
 .savebar.dirty,
 .savebar.error {
   border-color: var(--rust);
@@ -401,8 +417,6 @@
 .savebar.saved .savebar-msg { color: var(--green-600); font-weight: 600; }
 .savebar .admin-btn { padding: 10px 20px; flex: none; }
 .savebar .admin-btn:disabled { opacity: 0.45; cursor: default; }
-.savebar .admin-link { flex: none; }
-.savebar .admin-link:disabled { opacity: 0.45; cursor: default; }
 
 @media (max-width: 920px) {
   .savebar-dock { bottom: 12px; }
