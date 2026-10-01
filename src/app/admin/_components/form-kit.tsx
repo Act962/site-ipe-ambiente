@@ -2,7 +2,9 @@
 
 import { useEffect, useState, type ReactNode } from "react";
 import { DEFAULTS, type SiteContent } from "@/content/defaults";
-import { saveContent, uploadImage } from "@/content/actions";
+import { upload } from "@vercel/blob/client";
+import { saveContent } from "@/content/actions";
+import { MAX_IMAGE_BYTES, UPLOAD_ROUTE, uploadPathFor } from "@/content/upload";
 import type { SectionId } from "./sections";
 import { useTabs } from "./tabs";
 
@@ -79,17 +81,27 @@ export function useSectionForm<K extends keyof SiteContent>(
     setStatus("idle");
   };
 
-  const save = async () => {
+  /** Grava a seção. Devolve se deu certo (o aviso de saída depende disso). */
+  const save = async (): Promise<boolean> => {
     setStatus("saving");
     setError(null);
     try {
       await saveContent({ [section]: draft } as Patch);
       setBaseline(draft);
       setStatus("saved");
+      return true;
     } catch {
       setStatus("error");
       setError("Não foi possível salvar. Tente novamente.");
+      return false;
     }
+  };
+
+  /** Joga fora o que foi digitado e volta ao último estado gravado. */
+  const discard = () => {
+    setDraft(baseline);
+    setStatus("idle");
+    setError(null);
   };
 
   const reset = async () => {
@@ -108,11 +120,18 @@ export function useSectionForm<K extends keyof SiteContent>(
   };
 
   // Avisa as abas, que marcam a seção com edição pendente.
-  const { setDirty } = useTabs();
+  const { setDirty, registerControls } = useTabs();
+  const id = `sec-${String(section)}` as SectionId;
   const isDirty = JSON.stringify(draft) !== JSON.stringify(baseline);
   useEffect(() => {
-    setDirty(`sec-${String(section)}` as SectionId, isDirty);
-  }, [section, isDirty, setDirty]);
+    setDirty(id, isDirty);
+  }, [id, isDirty, setDirty]);
+
+  // Entrega ao aviso de saída o salvar/descartar desta seção, sempre com o
+  // rascunho atual.
+  useEffect(() => {
+    registerControls(id, { save, discard });
+  });
 
   return { draft, set, setList, save, reset, status, error };
 }
@@ -278,17 +297,29 @@ export function ImageField({
     const file = e.target.files?.[0];
     e.target.value = ""; // permite re-selecionar o mesmo arquivo
     if (!file) return;
-    setUploading(true);
     setErr(null);
-    const fd = new FormData();
-    fd.append("file", file);
-    const res = await uploadImage(fd);
-    setUploading(false);
-    if ("error" in res) {
-      setErr(res.error);
+    if (!file.type.startsWith("image/")) {
+      setErr("Envie um arquivo de imagem (JPG, PNG, WebP…).");
       return;
     }
-    onChange(res.url);
+    if (file.size > MAX_IMAGE_BYTES) {
+      setErr("Imagem muito grande (máximo 8 MB).");
+      return;
+    }
+    setUploading(true);
+    try {
+      // Vai direto do navegador para o Blob; a rota só emite o token (e é ela,
+      // com o Blob, que impõe de verdade o tipo e o tamanho).
+      const blob = await upload(uploadPathFor(file.name), file, {
+        access: "public",
+        handleUploadUrl: UPLOAD_ROUTE,
+      });
+      onChange(blob.url);
+    } catch {
+      setErr("Não foi possível enviar a imagem. Tente novamente.");
+    } finally {
+      setUploading(false);
+    }
   }
 
   return (
@@ -326,8 +357,24 @@ export function SectionCard({
   onReset: () => void;
   children: ReactNode;
 }) {
-  const { active } = useTabs();
+  const { active, dirty } = useTabs();
   const busy = status === "saving";
+  const isDirty = dirty.has(id as SectionId);
+
+  let state = "";
+  let message = "Sem alterações pendentes";
+  if (busy) message = "Salvando…";
+  else if (status === "error") {
+    state = " error";
+    message = error ?? "Erro ao salvar.";
+  } else if (isDirty) {
+    state = " dirty";
+    message = "Alterações não salvas";
+  } else if (status === "saved") {
+    state = " saved";
+    message = "Salvo ✓";
+  }
+
   // Só a aba ativa aparece; as outras ficam montadas (e com o rascunho) mas ocultas.
   return (
     <section id={id} className="card" hidden={id !== active}>
@@ -336,22 +383,36 @@ export function SectionCard({
         <h2>{title}</h2>
       </div>
       <div className="card-body">{children}</div>
-      <div className="card-foot">
-        <button className="admin-btn" onClick={onSave} disabled={busy}>
-          {busy ? "Salvando…" : "Salvar seção"}
-        </button>
-        <button
-          type="button"
-          className="admin-link"
-          onClick={onReset}
-          disabled={busy}
-        >
-          Restaurar padrão
-        </button>
-        {status === "saved" ? <span className="af-saved">Salvo ✓</span> : null}
-        {status === "error" ? (
-          <span className="af-error">{error ?? "Erro ao salvar."}</span>
-        ) : null}
+      {/* Barra de salvar: fixa no pé da tela, para não depender de rolar a seção
+          inteira. O dock repete a grade do painel e a alinha à coluna do card. */}
+      <div className="savebar-dock">
+        <div className="admin-layout">
+          <div className={`savebar${state}`}>
+            <div className="savebar-state">
+              <span className="savebar-dot" />
+              <strong>{title}</strong>
+              <span className="savebar-msg" role="status">
+                {message}
+              </span>
+            </div>
+            <button
+              type="button"
+              className="admin-link"
+              onClick={onReset}
+              disabled={busy}
+            >
+              Restaurar padrão
+            </button>
+            <button
+              type="button"
+              className="admin-btn"
+              onClick={onSave}
+              disabled={busy || !isDirty}
+            >
+              Salvar seção
+            </button>
+          </div>
+        </div>
       </div>
     </section>
   );

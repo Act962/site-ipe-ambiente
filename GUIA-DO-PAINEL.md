@@ -24,13 +24,18 @@ clique numa delas para abri-la:
 **Navegação · Hero (abertura) · Sobre · Valores · Áreas de Atuação ·
 Diferenciais · ESG · Galeria · Chamada Final · Contato · Rodapé**
 
-Cada seção tem os seus campos e, no rodapé, dois botões:
-**Salvar seção** e **Restaurar padrão**.
+Cada seção tem os seus campos. Os botões **Salvar seção** e **Restaurar padrão**
+ficam numa **barra fixa ao pé da tela**, sempre à vista — não é preciso rolar
+até o fim da seção para salvar.
 
-> 🔴 Um **ponto vermelho** ao lado do nome indica que aquela seção tem mudanças
-> **ainda não salvas**. Pode trocar de seção à vontade — o que foi digitado fica
-> guardado —, mas só vai para o site depois do **Salvar seção**. Se fechar ou
-> recarregar a página antes, as mudanças não salvas se perdem.
+> 🔴 Quando há mudanças **ainda não salvas**, a barra fica com contorno vermelho
+> e aparece um **ponto vermelho** ao lado do nome da seção. Elas só vão para o
+> site depois do **Salvar seção**.
+>
+> Se você tentar **trocar de seção** ou **sair** sem salvar, o painel pergunta o
+> que fazer: **Salvar e continuar**, **Descartar alterações** (volta ao que
+> estava salvo) ou **Continuar editando**. Ao **fechar ou recarregar a página**,
+> quem avisa é o próprio navegador.
 
 ---
 
@@ -38,7 +43,7 @@ Cada seção tem os seus campos e, no rodapé, dois botões:
 
 1. Escolha na lista a seção que quer mudar.
 2. Clique no campo e edite o texto.
-3. Clique em **Salvar seção**. Vai aparecer **“Salvo ✓”**.
+3. Clique em **Salvar seção**, na barra ao pé da tela. Vai aparecer **“Salvo ✓”**.
 4. A mudança aparece **no site na hora**. Abra o site (ou clique em **Ver site**,
    no topo) e atualize a página para conferir.
 
@@ -74,8 +79,8 @@ inteira — dá para tirar um dos cards do ar ou criar um novo em **+ Adicionar
 área** (preenchendo etiqueta, título, ícone, descrição e os serviços).
 
 > ⚠️ Nada disso vale antes de clicar em **Salvar seção**. Se removeu algo sem
-> querer, saia da página sem salvar — ou use **Restaurar padrão** para trazer a
-> lista original de volta.
+> querer, troque de seção e escolha **Descartar alterações** — ou use
+> **Restaurar padrão** para trazer a lista original de volta.
 
 Atenção: **apagar o texto de um serviço não o remove** — campo em branco volta ao
 texto original (veja abaixo). Para tirar do site, use o **✕**.
@@ -85,7 +90,7 @@ texto original (veja abaixo). Para tirar do site, use o **✕**.
 ## 6. Voltar ao texto/imagem original
 
 - **Apagar um campo de texto** e salvar → aquele campo volta ao **texto padrão**.
-- **Restaurar padrão** (no rodapé do card) → desfaz **todas** as edições daquela
+- **Restaurar padrão** (na barra ao pé da tela) → desfaz **todas** as edições daquela
   seção de uma vez.
 
 ---
